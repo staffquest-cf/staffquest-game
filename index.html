@@ -264,7 +264,7 @@ async function doSi() {
     var cr = await fetch(AT_URL, {method:'POST',headers:AT_H,
       body:JSON.stringify({fields:{
         'Nome':pN,'PIN':pin,'Ruolo':role,'Locale':pL,
-        'Data Creazione':new Date().toISOString(),
+        'Data Creazione':new Date().toISOString().slice(0,10),
         'XP Totale':0,'Ultima Sessione':new Date().toISOString()
       }})});
     if(!cr.ok){var eb=await cr.json();throw new Error(cr.status+' '+JSON.stringify(eb));}
