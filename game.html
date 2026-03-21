@@ -9,7 +9,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{width:100%;height:100%;background:#071330;font-family:monospace;overflow:hidden;display:flex;flex-direction:column;}
-#header{background:rgba(7,19,48,.98);border-bottom:1px solid rgba(245,200,66,.2);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10;}
+#header{background:rgba(5,13,36,.98);border-bottom:1px solid rgba(245,200,66,.2);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10;}
 #logo{height:28px;}
 #hud-right{text-align:right;}
 #hud-name{font-size:10px;font-weight:bold;color:#f5c842;}
@@ -19,35 +19,31 @@ html,body{width:100%;height:100%;background:#071330;font-family:monospace;overfl
 #map-svg{position:absolute;top:0;left:0;width:100%;height:100%;}
 #map-nodes{position:absolute;top:0;left:0;width:100%;height:100%;}
 .map-node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;touch-action:manipulation;z-index:5;}
-.room-img{border-radius:5px;border:2px solid rgba(255,255,255,.15);image-rendering:pixelated;transition:border-color .15s,transform .15s;display:block;}
-.map-node.done .room-img{border-color:rgba(46,204,113,.6);}
-.map-node.active .room-img{border-color:#f5c842;box-shadow:0 0 12px rgba(245,200,66,.4);animation:pulse 2s ease-in-out infinite;}
+.room-img{border-radius:5px;border:2px solid rgba(255,255,255,.15);image-rendering:pixelated;transition:all .15s;display:block;}
+.map-node.done .room-img{border-color:rgba(46,204,113,.7);}
+.map-node.active .room-img{border-color:#f5c842;animation:pulse 2s ease-in-out infinite;}
 .map-node:active .room-img{transform:scale(.93);}
-@keyframes pulse{0%,100%{box-shadow:0 0 8px rgba(245,200,66,.3);}50%{box-shadow:0 0 18px rgba(245,200,66,.6);}}
-.node-label{background:rgba(7,19,48,.92);border:1px solid rgba(245,200,66,.25);border-radius:5px;padding:3px 7px;font-size:8px;color:#f5c842;text-align:center;white-space:pre-line;line-height:1.3;pointer-events:none;}
+@keyframes pulse{0%,100%{box-shadow:0 0 8px rgba(245,200,66,.3);}50%{box-shadow:0 0 18px rgba(245,200,66,.7);}}
+.node-label{background:rgba(5,13,36,.92);border:1px solid rgba(245,200,66,.25);border-radius:5px;padding:3px 7px;font-size:8px;color:#f5c842;text-align:center;white-space:pre-line;line-height:1.3;pointer-events:none;}
 .map-node.done .node-label{color:#2ecc71;border-color:rgba(46,204,113,.3);}
 .node-check{position:absolute;top:-5px;right:-5px;background:#2ecc71;border-radius:50%;width:16px;height:16px;font-size:9px;display:none;align-items:center;justify-content:center;color:#fff;font-weight:bold;z-index:6;}
 .map-node.done .node-check{display:flex;}
 .tdeco{position:absolute;font-size:14px;animation:flicker 1.4s ease-in-out infinite alternate;z-index:4;pointer-events:none;}
 @keyframes flicker{0%{opacity:.5;transform:scale(1);}100%{opacity:1;transform:scale(1.1);}}
-#map-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:20;background:#07070f;}
-.spinner{width:28px;height:28px;border:3px solid rgba(245,200,66,.2);border-top-color:#f5c842;border-radius:50%;animation:spin .8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.load-text{font-size:11px;color:#445577;}
-#bottom-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(7,19,48,.95);border-top:1px solid rgba(245,200,66,.15);padding:7px 14px;display:flex;align-items:center;justify-content:space-between;z-index:10;}
+#bottom-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(5,13,36,.95);border-top:1px solid rgba(245,200,66,.15);padding:7px 14px;display:flex;align-items:center;justify-content:space-between;z-index:10;}
 #bar-info{font-size:9px;color:#6677bb;}
 #bar-count{font-size:9px;color:#f5c842;}
 /* NODE OVERLAY */
-#node-overlay{display:none;position:fixed;inset:0;z-index:50;background:#071330;flex-direction:column;}
-#node-overlay.show{display:flex;}
-#nh{background:rgba(7,19,48,.98);border-bottom:1px solid rgba(245,200,66,.2);padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
-#btn-nm{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:6px 10px;font-size:11px;color:#8899cc;cursor:pointer;font-family:monospace;touch-action:manipulation;}
-#nt{font-size:11px;font-weight:bold;color:#f5c842;flex:1;}
+#node-ov{display:none;position:fixed;inset:0;z-index:50;background:#071330;flex-direction:column;}
+#node-ov.show{display:flex;}
+#nh{background:rgba(5,13,36,.98);border-bottom:1px solid rgba(245,200,66,.2);padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.btn-back{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:6px 10px;font-size:11px;color:#8899cc;cursor:pointer;font-family:monospace;touch-action:manipulation;}
+#nt{font-size:12px;font-weight:bold;color:#f5c842;flex:1;}
 #nb{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;}
-#n-room-header{display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(245,200,66,.2);border-radius:10px;margin-bottom:4px;}
-#n-room-img{width:56px;height:56px;border-radius:6px;image-rendering:pixelated;border:2px solid rgba(245,200,66,.3);}
-#n-room-info .n-room-title{font-size:12px;font-weight:bold;color:#f5c842;}
-#n-room-info .n-room-sub{font-size:9px;color:#6677bb;margin-top:3px;}
+#n-header{display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(245,200,66,.2);border-radius:10px;margin-bottom:4px;}
+#n-img{width:56px;height:56px;border-radius:6px;image-rendering:pixelated;border:2px solid rgba(245,200,66,.3);}
+.n-title{font-size:12px;font-weight:bold;color:#f5c842;}
+.n-sub{font-size:9px;color:#6677bb;margin-top:3px;}
 .proc-row{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;touch-action:manipulation;font-family:monospace;}
 .proc-row:active{background:rgba(245,200,66,.08);border-color:#f5c842;}
 .proc-row.done{border-color:rgba(46,204,113,.4);background:rgba(46,204,113,.06);}
@@ -60,10 +56,9 @@ html,body{width:100%;height:100%;background:#071330;font-family:monospace;overfl
 .la{background:rgba(231,76,60,.15);color:#e74c3c;border:1px solid rgba(231,76,60,.3);}
 .lok{background:rgba(46,204,113,.2);color:#2ecc71;}
 /* QUIZ */
-#quiz-screen{display:none;position:fixed;inset:0;z-index:55;background:#071330;flex-direction:column;}
-#quiz-screen.show{display:flex;}
-#qh{background:rgba(7,19,48,.98);border-bottom:1px solid rgba(245,200,66,.2);padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
-#btn-qb{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:6px 10px;font-size:11px;color:#8899cc;cursor:pointer;font-family:monospace;touch-action:manipulation;}
+#quiz-sc{display:none;position:fixed;inset:0;z-index:55;background:#071330;flex-direction:column;}
+#quiz-sc.show{display:flex;}
+#qh{background:rgba(5,13,36,.98);border-bottom:1px solid rgba(245,200,66,.2);padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
 #qt{font-size:11px;font-weight:bold;color:#f5c842;flex:1;}
 #qprog{font-size:10px;color:#6677bb;flex-shrink:0;}
 #qbody{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;}
@@ -74,7 +69,7 @@ html,body{width:100%;height:100%;background:#071330;font-family:monospace;overfl
 .qop.correct{background:rgba(46,204,113,.15);border-color:#2ecc71;color:#2ecc71;}
 .qop.wrong{background:rgba(231,76,60,.12);border-color:#e74c3c;color:#e74c3c;}
 .qop.reveal{background:rgba(46,204,113,.08);border-color:rgba(46,204,113,.4);color:#2ecc71;}
-#q-fb{background:rgba(7,19,48,.9);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px;font-size:11px;color:#8899cc;line-height:1.6;display:none;}
+#q-fb{background:rgba(5,13,36,.9);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px;font-size:11px;color:#8899cc;line-height:1.6;display:none;}
 #q-fb.show{display:block;}
 #q-fbt{font-size:12px;font-weight:bold;margin-bottom:5px;}
 #q-fbt.ok{color:#2ecc71;}
@@ -82,8 +77,8 @@ html,body{width:100%;height:100%;background:#071330;font-family:monospace;overfl
 #btn-next{width:100%;padding:13px;border-radius:10px;font-size:13px;font-weight:bold;font-family:monospace;letter-spacing:1px;cursor:pointer;background:rgba(245,200,66,.12);color:#f5c842;border:1px solid rgba(245,200,66,.35);display:none;touch-action:manipulation;}
 #btn-next.show{display:block;}
 /* RISULTATO */
-#res-screen{display:none;position:fixed;inset:0;z-index:65;background:#071330;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:28px;}
-#res-screen.show{display:flex;}
+#res-sc{display:none;position:fixed;inset:0;z-index:65;background:#071330;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:28px;}
+#res-sc.show{display:flex;}
 #res-icon{font-size:56px;}
 #res-title{font-size:22px;font-weight:bold;color:#f5c842;}
 #res-xp{font-size:14px;color:#2ecc71;}
@@ -103,31 +98,33 @@ html,body{width:100%;height:100%;background:#071330;font-family:monospace;overfl
 <div id="map-wrap">
   <svg id="map-svg" xmlns="http://www.w3.org/2000/svg"></svg>
   <div id="map-nodes"></div>
-  <span class="tdeco" style="top:8px;left:8px;">&#128293;</span>
+  <span class="tdeco" style="top:8px;left:8px">&#128293;</span>
   <span class="tdeco" style="top:8px;right:8px;animation-delay:.7s">&#128293;</span>
-  <div id="map-loading"><div class="spinner"></div><div class="load-text">Carico il dungeon...</div></div>
-  <div id="bottom-bar"><div id="bar-info">Tocca una stanza per esplorare</div><div id="bar-count"></div></div>
+  <div id="bottom-bar">
+    <div id="bar-info">Tocca una stanza per esplorare</div>
+    <div id="bar-count"></div>
+  </div>
 </div>
 <!-- NODE OVERLAY -->
-<div id="node-overlay">
+<div id="node-ov">
   <div id="nh">
-    <button id="btn-nm" type="button" onclick="closeNode()">&#8592; Dungeon</button>
+    <button class="btn-back" type="button" onclick="closeNode()">&#8592; Dungeon</button>
     <div id="nt"></div>
   </div>
   <div id="nb">
-    <div id="n-room-header">
-      <img id="n-room-img" src="" alt="">
-      <div id="n-room-info"><div class="n-room-title" id="n-room-t"></div><div class="n-room-sub" id="n-room-s"></div></div>
+    <div id="n-header">
+      <img id="n-img" src="" alt="">
+      <div><div class="n-title" id="n-t"></div><div class="n-sub" id="n-s"></div></div>
     </div>
     <div id="n-procs"></div>
   </div>
 </div>
 <!-- QUIZ -->
-<div id="quiz-screen">
+<div id="quiz-sc">
   <div id="qh">
-    <button id="btn-qb" type="button" onclick="closeQuiz()">&#8592; Stanza</button>
+    <button class="btn-back" type="button" onclick="closeQuiz()">&#8592; Stanza</button>
     <div id="qt"></div>
-    <div id="qprog">1/8</div>
+    <div id="qprog">1/5</div>
   </div>
   <div id="qbody">
     <div id="q-sc"></div>
@@ -138,7 +135,7 @@ html,body{width:100%;height:100%;background:#071330;font-family:monospace;overfl
   </div>
 </div>
 <!-- RISULTATO -->
-<div id="res-screen">
+<div id="res-sc">
   <div id="res-icon"></div>
   <div id="res-title"></div>
   <div id="res-xp"></div>
@@ -154,14 +151,18 @@ html,body{width:100%;height:100%;background:#071330;font-family:monospace;overfl
 <script>
 var AT_TOKEN='patkd1CkZnGbrkGhi.7b444f999da251236d952814b8d6a29e507586f9718739e4a7ae18b3947b65d0';
 var AT_BASE='appc3kRop4WSftpC3';
-var AT_URL_P='https://api.airtable.com/v0/'+AT_BASE+'/Procedure%20-%20Staffquest';
 var AT_URL_U='https://api.airtable.com/v0/'+AT_BASE+'/Profili_Dipendenti%20-%20Staffquest';
 var AT_H={Authorization:'Bearer '+AT_TOKEN,'Content-Type':'application/json'};
-var MAP_NODES={"Cameriere": [{"id": "ap", "label": "Apertura\ne Chiusura", "x": 50, "y": 12, "size": "large", "connections": ["pul", "ser"]}, {"id": "pul", "label": "Pulizia\ne Bagni", "x": 22, "y": 36, "size": "medium", "connections": ["acc"]}, {"id": "ser", "label": "Servizio\nSala", "x": 78, "y": 36, "size": "medium", "connections": ["rec"]}, {"id": "acc", "label": "Accoglienza\nPrenotazioni", "x": 22, "y": 65, "size": "medium", "connections": ["rec"]}, {"id": "rec", "label": "Gestione\nReclami", "x": 50, "y": 82, "size": "large", "connections": []}], "Cuoco": [{"id": "ap", "label": "Apertura\ne Chiusura", "x": 50, "y": 12, "size": "large", "connections": ["pul", "pre"]}, {"id": "pul", "label": "Pulizia e\nOrganizzazione", "x": 22, "y": 38, "size": "medium", "connections": ["ser"]}, {"id": "pre", "label": "Preparazioni\nMise en Place", "x": 78, "y": 38, "size": "medium", "connections": ["ser"]}, {"id": "ser", "label": "Servizio\nCucina", "x": 50, "y": 62, "size": "large", "connections": ["prob"]}, {"id": "prob", "label": "Gestione\nProblemi", "x": 50, "y": 84, "size": "medium", "connections": []}], "Barista": [{"id": "ap", "label": "Apertura\ne Chiusura", "x": 50, "y": 10, "size": "large", "connections": ["pul", "mag"]}, {"id": "pul", "label": "Pulizia\nOrg. Bagno", "x": 20, "y": 35, "size": "small", "connections": ["pre"]}, {"id": "mag", "label": "Magazzino", "x": 80, "y": 35, "size": "small", "connections": ["pre"]}, {"id": "pre", "label": "Preparazioni", "x": 50, "y": 57, "size": "medium", "connections": ["ser"]}, {"id": "ser", "label": "Servizio\nBar", "x": 30, "y": 78, "size": "medium", "connections": ["rec"]}, {"id": "rec", "label": "Gestione\nReclami", "x": 72, "y": 78, "size": "small", "connections": []}]};
-var PERC_MAP={"Cameriere": {"Apertura e Chiusura": "ap", "Pulizia e Bagni": "pul", "Servizio Sala": "ser", "Accoglienza e Prenotazioni": "acc", "Gestione Reclami": "rec"}, "Cuoco": {"Apertura e Chiusura": "ap", "Pulizia e Organizzazione": "pul", "Preparazioni Mise en Place": "pre", "Servizio Cucina": "ser", "Gestione Problemi": "prob"}, "Barista": {"Apertura e Chiusura": "ap", "Pulizia Organizzazione e Bagno": "pul", "Magazzino": "mag", "Preparazioni": "pre", "Servizio Bar": "ser", "Gestione Reclami": "rec"}, "Sala": {"Apertura e Chiusura": "ap", "Pulizia e Bagni": "pul", "Servizio Sala": "ser", "Accoglienza e Prenotazioni": "acc", "Gestione Reclami": "rec"}, "Cucina": {"Apertura e Chiusura": "ap", "Pulizia e Organizzazione": "pul", "Preparazioni Mise en Place": "pre", "Servizio Cucina": "ser", "Gestione Problemi": "prob"}};
-var SIZES={large:'img-large',medium:'img-medium',small:'img-small'};
-var user=null,procedure=[],completati={};
-var curNode=null,curNodeProcs=[],curNodePerc='',curNodeImgSrc='',curNodeSz=72;
+
+var MAP_NODES={“Cameriere”: [{“id”: “ap”, “label”: “Apertura\ne Chiusura”, “x”: 50, “y”: 12, “size”: “large”, “connections”: [“pul”, “ser”]}, {“id”: “pul”, “label”: “Pulizia\ne Bagni”, “x”: 22, “y”: 36, “size”: “medium”, “connections”: [“acc”]}, {“id”: “ser”, “label”: “Servizio\nSala”, “x”: 78, “y”: 36, “size”: “medium”, “connections”: [“rec”]}, {“id”: “acc”, “label”: “Accoglienza\nPrenotazioni”, “x”: 22, “y”: 65, “size”: “medium”, “connections”: [“rec”]}, {“id”: “rec”, “label”: “Gestione\nReclami”, “x”: 50, “y”: 82, “size”: “large”, “connections”: []}], “Cuoco”: [{“id”: “ap”, “label”: “Apertura\ne Chiusura”, “x”: 50, “y”: 12, “size”: “large”, “connections”: [“pul”, “pre”]}, {“id”: “pul”, “label”: “Pulizia e\nOrganizzazione”, “x”: 22, “y”: 38, “size”: “medium”, “connections”: [“ser”]}, {“id”: “pre”, “label”: “Preparazioni\nMise en Place”, “x”: 78, “y”: 38, “size”: “medium”, “connections”: [“ser”]}, {“id”: “ser”, “label”: “Servizio\nCucina”, “x”: 50, “y”: 62, “size”: “large”, “connections”: [“prob”]}, {“id”: “prob”, “label”: “Gestione\nProblemi”, “x”: 50, “y”: 84, “size”: “medium”, “connections”: []}], “Barista”: [{“id”: “ap”, “label”: “Apertura\ne Chiusura”, “x”: 50, “y”: 10, “size”: “large”, “connections”: [“pul”, “mag”]}, {“id”: “pul”, “label”: “Pulizia\nOrg. Bagno”, “x”: 20, “y”: 35, “size”: “small”, “connections”: [“pre”]}, {“id”: “mag”, “label”: “Magazzino”, “x”: 80, “y”: 35, “size”: “small”, “connections”: [“pre”]}, {“id”: “pre”, “label”: “Preparazioni”, “x”: 50, “y”: 57, “size”: “medium”, “connections”: [“ser”]}, {“id”: “ser”, “label”: “Servizio\nBar”, “x”: 30, “y”: 78, “size”: “medium”, “connections”: [“rec”]}, {“id”: “rec”, “label”: “Gestione\nReclami”, “x”: 72, “y”: 78, “size”: “small”, “connections”: []}]};
+var PERC_MAP={“Cameriere”: {“Apertura e Chiusura”: “ap”, “Pulizia e Bagni”: “pul”, “Servizio Sala”: “ser”, “Accoglienza e Prenotazioni”: “acc”, “Gestione Reclami”: “rec”}, “Cuoco”: {“Apertura e Chiusura”: “ap”, “Pulizia e Organizzazione”: “pul”, “Preparazioni Mise en Place”: “pre”, “Servizio Cucina”: “ser”, “Gestione Problemi”: “prob”}, “Barista”: {“Apertura e Chiusura”: “ap”, “Pulizia Organizzazione e Bagno”: “pul”, “Magazzino”: “mag”, “Preparazioni”: “pre”, “Servizio Bar”: “ser”, “Gestione Reclami”: “rec”}, “Sala”: {“Apertura e Chiusura”: “ap”, “Pulizia e Bagni”: “pul”, “Servizio Sala”: “ser”, “Accoglienza e Prenotazioni”: “acc”, “Gestione Reclami”: “rec”}, “Cucina”: {“Apertura e Chiusura”: “ap”, “Pulizia e Organizzazione”: “pul”, “Preparazioni Mise en Place”: “pre”, “Servizio Cucina”: “ser”, “Gestione Problemi”: “prob”}};
+var SIZES={large:‘img-large’,medium:‘img-medium’,small:‘img-small’};
+
+// PROCEDURE DEMO — hardcodate, funzionano sempre senza Airtable
+var DEMO={“Apertura e Chiusura”: [{“id”: “d1”, “titolo”: “Apertura del locale”, “livello”: “Base”, “percorso”: “Apertura e Chiusura”, “scenario”: “Sono le 8:00 di mattina. Sei il primo ad arrivare al ristorante.”, “quiz”: [{“domanda”: “Prima di aprire controlli le luci. Cosa fai subito dopo?”, “opzioni”: [“Accendo tutto e aspetto i colleghi”, “Controllo uscite di emergenza e frigo”, “Preparo il caffè”, “Chiamo il responsabile”], “risposta_corretta”: “Controllo uscite di emergenza e frigo”}, {“domanda”: “Il frigo segna 6°C invece di 4°C. Cosa fai?”, “opzioni”: [“Aspetto che scenda da solo”, “Abbasso il termostato e registro la temperatura”, “Svuoto il frigo”, “Non faccio niente”], “risposta_corretta”: “Abbasso il termostato e registro la temperatura”}, {“domanda”: “Devi indossare la divisa. Noti una macchia. Cosa fai?”, “opzioni”: [“La indosso lo stesso, tanto sono in cucina”, “Metto un grembiule sopra”, “Cambio con una divisa pulita”, “Pulisco la macchia con acqua”], “risposta_corretta”: “Cambio con una divisa pulita”}, {“domanda”: “Senti odore di gas vicino ai fornelli. Prima cosa?”, “opzioni”: [“Accendo i fornelli per controllare”, “Chiudo il gas, apro le finestre, chiamo il responsabile”, “Aspetto 5 minuti”, “Accendo la cappa”], “risposta_corretta”: “Chiudo il gas, apro le finestre, chiamo il responsabile”}, {“domanda”: “Devi firmare il registro HACCP. Quando lo fai?”, “opzioni”: [“Solo se ci sono problemi”, “Ogni settimana”, “Ogni mattina prima di iniziare”, “Quando lo chiede il responsabile”], “risposta_corretta”: “Ogni mattina prima di iniziare”}]}], “Servizio Sala”: [{“id”: “d2”, “titolo”: “Gestione ordini al tavolo”, “livello”: “Intermedio”, “percorso”: “Servizio Sala”, “scenario”: “È sabato sera, il locale è pieno. Hai 4 tavoli da gestire.”, “quiz”: [{“domanda”: “Un cliente chiede un piatto non più disponibile. Cosa fai?”, “opzioni”: [“Dico "non ce l’abbiamo" e vado via”, “Mi scuso, spiego e propongo un’alternativa simile”, “Dico al cliente di scegliere altro senza spiegare”, “Invento una scusa”], “risposta_corretta”: “Mi scuso, spiego e propongo un’alternativa simile”}, {“domanda”: “Il cliente ha un’allergia alle noci. Come gestisci l’ordine?”, “opzioni”: [“Segno sulla comanda e avviso subito la cucina”, “Ci penso dopo quando arriva l’ordine”, “Evito solo le noci nel piatto”, “Non è mio compito”], “risposta_corretta”: “Segno sulla comanda e avviso subito la cucina”}, {“domanda”: “Il conto non torna, mancano 10€. Cosa fai?”, “opzioni”: [“Chiudo il conto lo stesso”, “Metto 10€ di tasca mia”, “Riverifco e segnalo al responsabile”, “Ignoro la differenza”], “risposta_corretta”: “Riverifco e segnalo al responsabile”}, {“domanda”: “Un cliente si lamenta che il piatto è freddo. Come rispondi?”, “opzioni”: [“Dico che è normale”, “Mi scuso, ritiro il piatto e avviso la cucina”, “Dico che l’ha mangiato quasi tutto”, “Offro uno sconto senza dirlo al responsabile”], “risposta_corretta”: “Mi scuso, ritiro il piatto e avviso la cucina”}, {“domanda”: “Hai un ritardo di 20 minuti in cucina. Il cliente non lo sa. Cosa fai?”, “opzioni”: [“Aspetto che si lamenti”, “Avviso il cliente subito con stima del tempo”, “Porto del pane e non dico niente”, “Dico che è colpa della cucina”], “risposta_corretta”: “Avviso il cliente subito con stima del tempo”}]}], “Accoglienza e Prenotazioni”: [{“id”: “d3”, “titolo”: “Accoglienza clienti”, “livello”: “Base”, “percorso”: “Accoglienza e Prenotazioni”, “scenario”: “Un cliente entra nel ristorante senza prenotazione.”, “quiz”: [{“domanda”: “Come accogli il cliente all’ingresso?”, “opzioni”: [“Lo ignoro finché non si siede”, “Lo saluto, verifico disponibilità e lo accompagno”, “Gli chiedo di aspettare fuori”, “Lo mando al bancone”], “risposta_corretta”: “Lo saluto, verifico disponibilità e lo accompagno”}, {“domanda”: “Il locale è pieno. Come gestisci il cliente senza prenotazione?”, “opzioni”: [“Dico "è pieno" e chiudo la conversazione”, “Mi scuso, do una stima dell’attesa e chiedo se vuole aspettare”, “Lo metto in lista senza dirgli niente”, “Lo ignoro”], “risposta_corretta”: “Mi scuso, do una stima dell’attesa e chiedo se vuole aspettare”}, {“domanda”: “Una prenotazione cancella all’ultimo minuto. Cosa fai?”, “opzioni”: [“Non faccio niente”, “Avviso subito la cucina e segno nel registro”, “Aspetto che arrivi un altro cliente”, “Segno solo nel registro”], “risposta_corretta”: “Avviso subito la cucina e segno nel registro”}, {“domanda”: “Un cliente telefona per prenotare e ha un’allergia. Cosa noti?”, “opzioni”: [“Solo nome e numero di persone”, “Nome, numero persone e allergia da comunicare alla cucina”, “Solo l’allergia”, “Non prendo nota”], “risposta_corretta”: “Nome, numero persone e allergia da comunicare alla cucina”}, {“domanda”: “Un cliente arriva 30 minuti in ritardo sulla prenotazione. Cosa fai?”, “opzioni”: [“Do il suo tavolo a un altro”, “Mantengo il tavolo se disponibile e lo accolgo normalmente”, “Lo faccio aspettare come punizione”, “Chiamo il responsabile senza far niente”], “risposta_corretta”: “Mantengo il tavolo se disponibile e lo accolgo normalmente”}]}], “Gestione Reclami”: [{“id”: “d4”, “titolo”: “Gestione reclamo cliente”, “livello”: “Avanzato”, “percorso”: “Gestione Reclami”, “scenario”: “Un cliente urla che ha trovato un capello nel piatto davanti a tutti.”, “quiz”: [{“domanda”: “Come reagisci immediatamente?”, “opzioni”: [“Dico che non è possibile”, “Mi scuso sinceramente, ritiro il piatto e avviso il responsabile”, “Offro uno sconto e vado via”, “Accuso la cucina”], “risposta_corretta”: “Mi scuso sinceramente, ritiro il piatto e avviso il responsabile”}, {“domanda”: “Il cliente vuole i soldi indietro. Puoi decidere da solo?”, “opzioni”: [“Sì, offro subito il rimborso”, “No, chiamo il responsabile che ha l’autorità di decidere”, “Dico di no e vado via”, “Ignoro la richiesta”], “risposta_corretta”: “No, chiamo il responsabile che ha l’autorità di decidere”}, {“domanda”: “Dopo aver risolto, cosa fai?”, “opzioni”: [“Non faccio niente, è finita”, “Segnalo l’episodio al responsabile per migliorare”, “Racconto ai colleghi”, “Dimentico”], “risposta_corretta”: “Segnalo l’episodio al responsabile per migliorare”}, {“domanda”: “Un cliente aggressivo alza la voce. Come mantieni la calma?”, “opzioni”: [“Alzo la voce anche io”, “Resto calmo, parlo piano, lo porto in un’area privata”, “Chiamo la sicurezza subito”, “Abbandono il tavolo”], “risposta_corretta”: “Resto calmo, parlo piano, lo porto in un’area privata”}, {“domanda”: “Il reclamo è chiaramente esagerato. Cosa fai?”, “opzioni”: [“Lo dico al cliente”, “Ascolto comunque con rispetto e gestisco professionalmente”, “Chiamo il responsabile senza ascoltare”, “Ignoro”], “risposta_corretta”: “Ascolto comunque con rispetto e gestisco professionalmente”}]}], “Pulizia e Bagni”: [{“id”: “d5”, “titolo”: “Pulizia postazione e bagni”, “livello”: “Base”, “percorso”: “Pulizia e Bagni”, “scenario”: “Fine turno. Devi pulire la sala e i bagni prima di uscire.”, “quiz”: [{“domanda”: “Con quale frequenza controlli i bagni durante il servizio?”, “opzioni”: [“Solo alla fine”, “Ogni 30-45 minuti”, “Solo se un cliente si lamenta”, “Mai, non è mio compito”], “risposta_corretta”: “Ogni 30-45 minuti”}, {“domanda”: “Trovi il bagno senza carta igienica. Cosa fai?”, “opzioni”: [“Aspetto che finisca completamente”, “Sostituisco subito e controllo le riserve”, “Lo segno e aspetto domani”, “Non è mio compito”], “risposta_corretta”: “Sostituisco subito e controllo le riserve”}, {“domanda”: “Qual è l’ordine corretto per pulire i tavoli?”, “opzioni”: [“Prima il pavimento poi i tavoli”, “Prima rimuovo i rifiuti, poi santifico, poi asciugo”, “Prima asciugo poi metto il detergente”, “Non importa l’ordine”], “risposta_corretta”: “Prima rimuovo i rifiuti, poi santifico, poi asciugo”}, {“domanda”: “Hai finito il detergente igienizzante. Cosa fai?”, “opzioni”: [“Pulisco con solo acqua”, “Segnalo al responsabile e utilizzo il prodotto sostitutivo approvato”, “Uso qualsiasi detergente trovo”, “Non pulisco finché non arriva”], “risposta_corretta”: “Segnalo al responsabile e utilizzo il prodotto sostitutivo approvato”}, {“domanda”: “Un collega non ha pulito la sua area. Cosa fai?”, “opzioni”: [“Non faccio niente, non è colpa mia”, “Lo segnalo al responsabile con calma”, “Pulisco io senza dire niente”, “Litigo con il collega”], “risposta_corretta”: “Lo segnalo al responsabile con calma”}]}]};
+
+var user=null,completati={};
+var curNode=null,curNodeProcs=[],curNodePerc=’’,curNodeImgSrc=’’,curNodeSz=72;
 var curProc=null,curQuiz=[],curQ=0,curScore=0,answered=false;
 
 window.onload=function(){
@@ -173,28 +174,10 @@ document.getElementById(‘hud-role’).textContent=(user.ruolo||’’).toUpper
 document.getElementById(‘hud-xp’).textContent=’XP: ’+(user.xp||0);
 var pr=sessionStorage.getItem(‘sq_progressi’);
 if(pr) completati=JSON.parse(pr);
-loadProc();
+renderMap();
 };
 
-async function loadProc(){
-try{
-// Carica tutte le procedure con JSON Gioco compilato
-// Quando i campi Ruolo/Percorso saranno popolati in Airtable si riattiva il filtro
-var res=await fetch(AT_URL_P+’?fields[]=Titolo+procedura&fields[]=Ruolo&fields[]=Livello&fields[]=Percorso&fields[]=JSON+Gioco&pageSize=100’,{headers:AT_H});
-if(!res.ok) throw new Error(‘API ‘+res.status);
-var d=await res.json();
-// Filtra solo quelle con JSON Gioco compilato
-procedure=(d.records||[]).filter(function(rec){
-return rec.fields[‘JSON Gioco’]&&rec.fields[‘JSON Gioco’].trim().length>10;
-});
-renderMap();
-}catch(e){
-document.getElementById(‘map-loading’).innerHTML=’<div style="color:#e74c3c;font-size:11px;padding:20px;">Errore: ‘+e.message+’</div>’;
-}
-}
-
 function renderMap(){
-document.getElementById(‘map-loading’).style.display=‘none’;
 var wrap=document.getElementById(‘map-wrap’);
 var W=wrap.offsetWidth, H=wrap.offsetHeight;
 var svg=document.getElementById(‘map-svg’);
@@ -207,44 +190,19 @@ if(ruolo===‘Cucina’) ruolo=‘Cuoco’;
 var nodes=MAP_NODES[ruolo]||MAP_NODES[‘Cameriere’];
 var pm=PERC_MAP[ruolo]||PERC_MAP[‘Cameriere’];
 
-// Raggruppa procedure per percorso
-// Se Percorso e’ vuoto, distribuisce sulle stanze disponibili in ordine
-var pp={};
-var nodeOrder=nodes.map(function(n){return Object.keys(pm).find(function(k){return pm[k]===n.id;})||’’;}).filter(Boolean);
-var unassigned=[];
-procedure.forEach(function(rec){
-var p=rec.fields[‘Percorso’]||’’;
-if(p && pm[p]){
-if(!pp[p]) pp[p]=[];
-pp[p].push(rec);
-} else {
-unassigned.push(rec);
-}
-});
-// Distribuisce le procedure senza percorso sui nodi in ordine
-unassigned.forEach(function(rec,i){
-var nodePerc=nodeOrder[i % nodeOrder.length];
-if(nodePerc){
-if(!pp[nodePerc]) pp[nodePerc]=[];
-pp[nodePerc].push(rec);
-}
-});
-
-// Posizioni pixel
 var pos={};
 nodes.forEach(function(n){pos[n.id]={x:W*n.x/100,y:H*n.y/100};});
 
-// SVG corridoi
+// Corridoi SVG
 var sc=’’;
 nodes.forEach(function(n){
-var p1=pos[n.id];
 n.connections.forEach(function(cid){
-var p2=pos[cid];
-if(!p2) return;
-sc+=’<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#0d1a30" stroke-width="30" stroke-linecap="round"/>’;
-sc+=’<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#1a2a4a" stroke-width="24" stroke-linecap="round"/>’;
-sc+=’<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#808aa3" stroke-width="14" stroke-linecap="round" opacity="0.3"/>’;
-sc+=’<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#c0c8e0" stroke-width="4" stroke-linecap="round" opacity="0.08"/>’;
+var p1=pos[n.id],p2=pos[cid];
+if(!p2)return;
+sc+=’<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#080f20" stroke-width="32" stroke-linecap="round"/>’;
+sc+=’<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#141e3a" stroke-width="26" stroke-linecap="round"/>’;
+sc+=’<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#808aa3" stroke-width="16" stroke-linecap="round" opacity="0.28"/>’;
+sc+=’<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#c0c8e0" stroke-width="4" stroke-linecap="round" opacity="0.07"/>’;
 });
 });
 svg.innerHTML=sc;
@@ -254,11 +212,11 @@ nodes.forEach(function(n){
 var p=pos[n.id];
 var imgSrc=document.getElementById(SIZES[n.size]||‘img-medium’).src;
 var nodePerc=Object.keys(pm).find(function(k){return pm[k]===n.id;})||’’;
-var nProcs=nodePerc?(pp[nodePerc]||[]):[];
-var nDone=nProcs.length>0&&nProcs.every(function(r){return completati[r.id];});
+var nProcs=DEMO[nodePerc]||[];
+var nDone=nProcs.length>0&&nProcs.every(function(pr){return completati[pr.id];});
 var hasP=nProcs.length>0;
-if(hasP) total++;
-if(nDone) done++;
+if(hasP){total++;}
+if(nDone){done++;}
 var sz=n.size===‘large’?92:n.size===‘medium’?68:52;
 var div=document.createElement(‘div’);
 div.className=‘map-node’+(nDone?’ done’:(hasP?’ active’:’’));
@@ -272,7 +230,6 @@ var lbl=document.createElement(‘div’);
 lbl.className=‘node-label’;
 lbl.style.maxWidth=(sz+20)+‘px’;
 lbl.textContent=n.label;
-// Torcia sulle stanze grandi non completate
 if(n.size===‘large’&&!nDone&&hasP){
 var t=document.createElement(‘span’);
 t.style.cssText=‘position:absolute;font-size:11px;top:-3px;right:-3px;’;
@@ -293,38 +250,31 @@ document.getElementById(‘bar-count’).textContent=done+’/’+total+’ comp
 function openNode(node,procs,perc,imgSrc,sz){
 curNode=node; curNodeProcs=procs; curNodePerc=perc; curNodeImgSrc=imgSrc; curNodeSz=sz;
 document.getElementById(‘nt’).textContent=perc;
-var ni=document.getElementById(‘n-room-img’);
+var ni=document.getElementById(‘n-img’);
 ni.src=imgSrc; ni.style.width=sz+‘px’; ni.style.height=sz+‘px’;
-document.getElementById(‘n-room-t’).textContent=perc;
-document.getElementById(‘n-room-s’).textContent=procs.length+’ procedure disponibili’;
+document.getElementById(‘n-t’).textContent=perc;
+document.getElementById(‘n-s’).textContent=procs.length+’ procedura’+(procs.length>1?‘e’:’’) +’ disponibil’+(procs.length>1?‘i’:‘e’);
 var pd=document.getElementById(‘n-procs’); pd.innerHTML=’’;
-procs.forEach(function(rec){
-var fl=rec.fields, lv=fl[‘Livello’]||‘Base’, isDone=completati[rec.id]?true:false;
+procs.forEach(function(proc){
+var lv=proc.livello||‘Base’,isDone=completati[proc.id]?true:false;
 var row=document.createElement(‘div’);
 row.className=‘proc-row’+(isDone?’ done’:’’);
 var lc=isDone?‘lok’:lv===‘Base’?‘lb’:lv===‘Intermedio’?‘li’:‘la’;
-row.innerHTML=’<div class="pr-info"><div class="pr-title">’+fl[‘Titolo procedura’]+’</div><div class="pr-sub">’+lv+(isDone?’ · Completato’:’’)+’</div></div><span class="pr-badge '+lc+'">’+(isDone?’✓’:lv)+’</span>’;
-row.onclick=(function(r){return function(){startQuiz(r);};}) (rec);
+row.innerHTML=’<div class="pr-info"><div class="pr-title">’+proc.titolo+’</div><div class="pr-sub">’+lv+(isDone?’ · Completato’:’’)+’</div></div><span class="pr-badge '+lc+'">’+(isDone?’✓’:lv)+’</span>’;
+row.onclick=(function(pr){return function(){startQuiz(pr);};}) (proc);
 pd.appendChild(row);
 });
-document.getElementById(‘node-overlay’).classList.add(‘show’);
+document.getElementById(‘node-ov’).classList.add(‘show’);
 }
 
-function closeNode(){document.getElementById(‘node-overlay’).classList.remove(‘show’);}
+function closeNode(){document.getElementById(‘node-ov’).classList.remove(‘show’);}
 
-function startQuiz(rec){
-try{
-var raw=rec.fields[‘JSON Gioco’];
-var parsed=JSON.parse(raw);
-var obj=Array.isArray(parsed)?parsed[0]:parsed;
-var quiz=obj.quiz||(obj.json_gioco&&obj.json_gioco.quiz);
-if(!quiz||quiz.length===0){alert(‘Quiz non disponibile per questa procedura.’);return;}
-curProc=rec; curQuiz=quiz; curQ=0; curScore=0; answered=false;
-document.getElementById(‘qt’).textContent=rec.fields[‘Titolo procedura’]||‘Quiz’;
-document.getElementById(‘node-overlay’).classList.remove(‘show’);
-document.getElementById(‘quiz-screen’).classList.add(‘show’);
+function startQuiz(proc){
+curProc=proc; curQuiz=proc.quiz; curQ=0; curScore=0; answered=false;
+document.getElementById(‘qt’).textContent=proc.titolo;
+document.getElementById(‘node-ov’).classList.remove(‘show’);
+document.getElementById(‘quiz-sc’).classList.add(‘show’);
 showQ();
-}catch(e){alert(’Errore: ’+e.message);}
 }
 
 function showQ(){
@@ -334,11 +284,9 @@ document.getElementById(‘qprog’).textContent=(curQ+1)+’/’+curQuiz.length
 document.getElementById(‘q-dom’).textContent=q.domanda;
 document.getElementById(‘q-fb’).classList.remove(‘show’);
 document.getElementById(‘btn-next’).classList.remove(‘show’);
-var raw=JSON.parse(curProc.fields[‘JSON Gioco’]);
-var obj=Array.isArray(raw)?raw[0]:raw;
-var sc=(obj.json_gioco&&obj.json_gioco.scenario)||obj.scenario||’’;
 var scEl=document.getElementById(‘q-sc’);
-scEl.textContent=sc; scEl.style.display=sc?‘block’:‘none’;
+scEl.textContent=curProc.scenario||’’;
+scEl.style.display=curProc.scenario?‘block’:‘none’;
 var od=document.getElementById(‘q-ops’); od.innerHTML=’’;
 q.opzioni.forEach(function(op){
 var btn=document.createElement(‘button’);
@@ -352,7 +300,7 @@ document.getElementById(‘qbody’).scrollTop=0;
 function checkQ(chosen,correct){
 if(answered)return; answered=true;
 var isOk=chosen.trim()===correct.trim();
-if(isOk) curScore++;
+if(isOk)curScore++;
 document.querySelectorAll(’.qop’).forEach(function(btn){
 btn.disabled=true;
 if(btn.textContent.trim()===correct.trim()) btn.classList.add(isOk?‘correct’:‘reveal’);
@@ -376,40 +324,38 @@ user.xp=(user.xp||0)+xp;
 document.getElementById(‘hud-xp’).textContent=‘XP: ‘+user.xp;
 sessionStorage.setItem(‘sq_user’,JSON.stringify(user));
 if(passed){
-completati[curProc.id]={score:perc,xp:xp,data:new Date().toISOString().slice(0,10)};
+completati[curProc.id]={score:perc,xp:xp};
 sessionStorage.setItem(‘sq_progressi’,JSON.stringify(completati));
-saveXP(xp);
+saveXP();
 }
-document.getElementById(‘quiz-screen’).classList.remove(‘show’);
+document.getElementById(‘quiz-sc’).classList.remove(‘show’);
 var icon=perc===100?’🏆’:perc>=70?’⭐’:’😅’;
 document.getElementById(‘res-icon’).innerHTML=icon;
 document.getElementById(‘res-title’).textContent=perc>=70?‘Superato!’:‘Riprova!’;
 document.getElementById(‘res-xp’).textContent=curScore+’/’+total+’ corrette · +’+xp+’ XP’;
-document.getElementById(‘res-msg’).textContent=perc>=70?‘Hai risposto correttamente al ‘+perc+’%.’:‘Ti serve il 70% per superare. Riprova!’;
-document.getElementById(‘res-screen’).classList.add(‘show’);
+document.getElementById(‘res-msg’).textContent=perc>=70
+?‘Hai risposto correttamente al ‘+perc+’%. Torna al dungeon per la prossima stanza!’
+:‘Ti serve il 70% per superare. Ce la puoi fare!’;
+document.getElementById(‘res-sc’).classList.add(‘show’);
 }
 
-async function saveXP(xp){
+async function saveXP(){
 try{
 await fetch(AT_URL_U+’/’+user.id,{method:‘PATCH’,headers:AT_H,
 body:JSON.stringify({fields:{‘XP Totale’:user.xp,‘Ultima Sessione’:new Date().toISOString().slice(0,10)}})
 });
-}catch(e){console.log(‘save err’,e);}
+}catch(e){console.log(‘XP save:’,e);}
 }
 
 function closeQuiz(){
-document.getElementById(‘quiz-screen’).classList.remove(‘show’);
+document.getElementById(‘quiz-sc’).classList.remove(‘show’);
 openNode(curNode,curNodeProcs,curNodePerc,curNodeImgSrc,curNodeSz);
 }
 
 function backToMap(){
-document.getElementById(‘res-screen’).classList.remove(‘show’);
-document.getElementById(‘node-overlay’).classList.remove(‘show’);
-document.getElementById(‘map-nodes’).innerHTML=’’;
-document.getElementById(‘map-svg’).innerHTML=’’;
-document.getElementById(‘map-loading’).style.display=‘flex’;
-document.getElementById(‘map-loading’).innerHTML=’<div class="spinner"></div><div class="load-text">Aggiorno il dungeon…</div>’;
-loadProc();
+document.getElementById(‘res-sc’).classList.remove(‘show’);
+document.getElementById(‘node-ov’).classList.remove(‘show’);
+renderMap();
 }
 </script>
 
