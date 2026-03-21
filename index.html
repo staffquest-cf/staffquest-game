@@ -229,7 +229,7 @@ async function doLogin() {
       }
       fetch(AT_URL+'/'+rec.id, {method:'PATCH',headers:AT_H,
         body:JSON.stringify({fields:{'Ultima Sessione':new Date().toISOString().slice(0,10)}})});
-      user={id:rec.id,nome:fl['Nome']||nome,ruolo:fl['Ruolo']||role,
+      user={id:rec.id,nome:fl['Nome']||nome,ruolo:role,
         classe:cls,emoji:emoji,locale:fl['Locale']||locale,
         xp:fl['XP Totale']||0,nuovo:false};
       setMsg('Accesso riuscito!','#2ecc71');
