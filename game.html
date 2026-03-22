@@ -18,8 +18,11 @@ body{display:flex;justify-content:center;align-items:center}
   display:flex;justify-content:space-between;align-items:flex-start;gap:8px
 }
 .hb{
-  background:rgba(5,13,36,.92);border:1px solid rgba(245,200,66,.28);
-  border-radius:8px;padding:5px 9px;box-shadow:0 2px 8px rgba(0,0,0,.25)
+  background:rgba(5,13,36,.92);
+  border:1px solid rgba(245,200,66,.28);
+  border-radius:8px;
+  padding:5px 9px;
+  box-shadow:0 2px 8px rgba(0,0,0,.25)
 }
 .hn{font-size:10px;font-weight:bold;color:#f5c842}
 .hx{font-size:8px;color:#7ad47a;margin-top:2px}
@@ -29,9 +32,19 @@ body{display:flex;justify-content:center;align-items:center}
 
 #toast{
   position:absolute;bottom:98px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,.92);color:#d9deeb;font-size:9px;padding:6px 14px;border-radius:20px;
-  border:1px solid #2a2a3a;pointer-events:none;opacity:0;transition:opacity .3s;
-  white-space:nowrap;z-index:15;max-width:90%;text-align:center
+  background:rgba(0,0,0,.92);
+  color:#d9deeb;
+  font-size:9px;
+  padding:6px 14px;
+  border-radius:20px;
+  border:1px solid #2a2a3a;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .3s;
+  white-space:nowrap;
+  z-index:15;
+  max-width:90%;
+  text-align:center
 }
 
 #sage-ov{
@@ -40,7 +53,10 @@ body{display:flex;justify-content:center;align-items:center}
 #sage-ov.show{display:flex}
 #sage-bg{position:absolute;inset:0;background:rgba(0,0,0,.58)}
 #sage-box{position:relative;background:#07070f;border-top:3px solid #f5c842}
-#sage-hdr{display:flex;align-items:center;gap:10px;padding:10px 14px 8px;border-bottom:1px solid rgba(245,200,66,.2)}
+#sage-hdr{
+  display:flex;align-items:center;gap:10px;padding:10px 14px 8px;
+  border-bottom:1px solid rgba(245,200,66,.2)
+}
 #sage-face{
   width:48px;height:48px;border-radius:8px;border:2px solid rgba(245,200,66,.4);
   overflow:hidden;flex-shrink:0;background:#0d0d22;display:flex;align-items:center;justify-content:center
@@ -49,7 +65,9 @@ body{display:flex;justify-content:center;align-items:center}
 #sage-nametag{font-size:11px;font-weight:bold;color:#f5c842}
 #sage-proc{font-size:9px;color:#6677bb;margin-top:2px}
 #sage-body{padding:10px 14px}
-#sage-sc{font-size:10px;color:#8899bb;line-height:1.5;margin-bottom:8px;font-style:italic;min-height:30px}
+#sage-sc{
+  font-size:10px;color:#8899bb;line-height:1.5;margin-bottom:8px;font-style:italic;min-height:30px
+}
 #sage-q{font-size:12px;font-weight:bold;color:#f5c842;line-height:1.4;margin-bottom:10px}
 #sage-ch{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
 .sage-btn{
@@ -174,9 +192,6 @@ body{display:flex;justify-content:center;align-items:center}
 
 <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
 <script>
-/* =========================
-   CONFIG
-========================= */
 const TW = 16;
 const GW = 15;
 const GH = 24;
@@ -184,12 +199,9 @@ const SCALE = 2;
 const MAX_XP_BAR = 500;
 const STORAGE_KEYS = {
   user: 'sq_user',
-  progress: 'sq_progressi_v3'
+  progress: 'sq_progressi_v4'
 };
 
-/* =========================
-   BASE MAP
-========================= */
 const CMAP = [
   [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
   [2,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
@@ -217,9 +229,6 @@ const CMAP = [
   [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
 ];
 
-/* =========================
-   GAME DATA
-========================= */
 const ALL_MAPS = {
   Cameriere: [
     { id: "ap",  label: "Apertura\nChiusura",     x: 50, y:  8, sz: 2, conn: ["sal"] },
@@ -523,9 +532,6 @@ const ALL_QUESTS = {
   }
 };
 
-/* =========================
-   STORAGE / STATE
-========================= */
 function safeParse(raw, fallback) {
   try { return raw ? JSON.parse(raw) : fallback; }
   catch { return fallback; }
@@ -597,10 +603,9 @@ function setBadge(key) {
   persistProgress();
 }
 
-/* =========================
-   UI HELPERS
-========================= */
-function qs(id) { return document.getElementById(id); }
+function qs(id) {
+  return document.getElementById(id);
+}
 
 function updateHUD() {
   qs('hn').textContent = `${state.user.nome} · ${state.user.ruolo}`;
@@ -646,9 +651,6 @@ function closeResult() {
 }
 qs('btn-res').addEventListener('click', closeResult);
 
-/* =========================
-   QUIZ / SAGE
-========================= */
 function openSage(nodeId) {
   const quest = ALL_QUESTS[nodeId];
   if (!quest) {
@@ -755,9 +757,6 @@ function finishSageQuiz() {
   qs('result').classList.add('show');
 }
 
-/* =========================
-   SAGE FACE
-========================= */
 const sageFace = {
   timer: null,
   frame: 0,
@@ -799,9 +798,6 @@ const sageFace = {
 sageFace.start();
 window.addEventListener('beforeunload', () => sageFace.stop());
 
-/* =========================
-   DATA VALIDATION
-========================= */
 (function validateData() {
   Object.entries(ALL_MAPS).forEach(([role, nodes]) => {
     nodes.forEach(node => {
@@ -817,9 +813,6 @@ window.addEventListener('beforeunload', () => sageFace.stop());
   });
 })();
 
-/* =========================
-   PHASER SCENE
-========================= */
 class DungeonScene extends Phaser.Scene {
   constructor() {
     super('Dungeon');
@@ -830,12 +823,10 @@ class DungeonScene extends Phaser.Scene {
     this.nodeGfx = {};
     this.doorInteract = [];
     this.torches = [];
-    this.decorations = [];
     this._handlers = [];
     this.walkFrame = 0;
     this.idleFrame = 0;
     this.animTimer = 0;
-    this.torchTimer = 0;
   }
 
   preload() {
@@ -867,9 +858,6 @@ class DungeonScene extends Phaser.Scene {
     });
 
     this.load.spritesheet('wallsFloor', 'assets/walls_floor.png', {
-      frameWidth: 16, frameHeight: 16
-    });
-    this.load.spritesheet('doorsChest', 'assets/doors_lever_chest_animation.png', {
       frameWidth: 16, frameHeight: 16
     });
     this.load.spritesheet('fire2', 'assets/fire_animation2.png', {
@@ -928,7 +916,7 @@ class DungeonScene extends Phaser.Scene {
 
   buildFloor() {
     const FLOOR_FRAMES = [42, 43, 55, 56];
-    const WALL_FRAMES  = [0, 1, 13, 14];
+    const WALL_FRAMES = [0, 1, 13, 14];
     const CRACK_FRAMES = [0, 1, 2, 8, 9, 10];
     const OBJECTS = [
       { c: 2,  r: 2,  frame: 50 },
@@ -997,9 +985,10 @@ class DungeonScene extends Phaser.Scene {
         const p2 = this.nodePixels[cid];
         if (!p2) return;
 
-        cg.lineStyle(10, 0x1f3457, 1);
+        cg.lineStyle(6, 0x27406b, 0.95);
         cg.lineBetween(p1.x, p1.y, p2.x, p2.y);
-        cg.lineStyle(6, 0x6c88b0, 0.18);
+
+        cg.lineStyle(2, 0x5d7faa, 0.22);
         cg.lineBetween(p1.x, p1.y, p2.x, p2.y);
       });
     });
@@ -1007,38 +996,48 @@ class DungeonScene extends Phaser.Scene {
     this.nodes.forEach(n => {
       const p = this.nodePixels[n.id];
       const done = isCompleted(n.id);
-      const scale = n.sz === 2 ? 1.15 : 1;
-      const glowRadius = n.sz === 2 ? 16 : 13;
+      const big = n.sz === 2;
+      const doorW = big ? 22 : 18;
+      const doorH = big ? 28 : 22;
+      const glowRadius = big ? 15 : 12;
 
-      const glow = this.add.graphics().setDepth(2.8);
-      glow.fillStyle(done ? 0x2ecc71 : 0xf5c842, done ? 0.07 : 0.05);
-      glow.fillCircle(p.x, p.y, glowRadius);
+      const glow = this.add.graphics().setDepth(2.6);
+      glow.fillStyle(done ? 0x2ecc71 : 0xf5c842, done ? 0.08 : 0.05);
+      glow.fillCircle(p.x, p.y + 3, glowRadius);
 
-      const doorFrame = done ? 21 : 20;
-      const door = this.add.image(p.x, p.y, 'doorsChest', doorFrame)
-        .setDepth(3)
-        .setScale(scale);
+      const g = this.add.graphics().setDepth(3);
+      this.drawDoorNode(g, p.x, p.y, doorW, doorH, done);
 
-      const label = this.add.text(p.x, p.y - (n.sz === 2 ? 15 : 12), n.label, {
-        fontSize: '4px',
-        color: done ? '#2ecc71' : '#f5c842',
-        fontFamily: 'monospace',
-        align: 'center',
-        backgroundColor: 'rgba(5,13,36,0.80)',
-        padding: { x: 2, y: 1 }
-      }).setOrigin(0.5, 1).setDepth(4);
+      const label = this.add.text(
+        p.x,
+        p.y - (big ? 16 : 13),
+        n.label,
+        {
+          fontSize: '4px',
+          color: done ? '#2ecc71' : '#f5c842',
+          fontFamily: 'monospace',
+          align: 'center',
+          backgroundColor: 'rgba(5,13,36,0.78)',
+          padding: { x: 2, y: 1 }
+        }
+      ).setOrigin(0.5, 1).setDepth(4);
 
       this.nodeGfx[n.id] = {
-        glow, door, label,
-        x: p.x, y: p.y,
-        sz: n.sz === 2 ? 18 : 13,
+        g,
+        glow,
+        label,
+        x: p.x,
+        y: p.y,
+        w: doorW,
+        h: doorH,
+        sz: big ? 18 : 13,
         isDone: done
       };
 
-      if (n.sz === 2 && !done) {
-        const torch = this.add.sprite(p.x + 18, p.y, 'fire2', 0)
+      if (big && !done) {
+        const torch = this.add.sprite(p.x + 16, p.y - 2, 'fire2', 0)
           .setDepth(4)
-          .setScale(0.9);
+          .setScale(0.8);
         torch.play('torchLoop');
         this.torches.push(torch);
       }
@@ -1048,9 +1047,48 @@ class DungeonScene extends Phaser.Scene {
         y: p.y,
         id: n.id,
         lbl: n.label.replace(/\n/g, ' '),
-        sz: n.sz === 2 ? 18 : 13
+        sz: big ? 18 : 13
       });
     });
+  }
+
+  drawDoorNode(g, x, y, w, h, done) {
+    g.clear();
+
+    const frameColor = 0x46506b;
+    const innerColor = done ? 0x2d6a3d : 0x7a3f1d;
+    const accentColor = done ? 0x2ecc71 : 0xd4a520;
+
+    g.fillStyle(0x000000, 0.25);
+    g.fillRoundedRect(x - w/2 + 1, y - h/2 + 2, w, h, 3);
+
+    g.fillStyle(0x1b2236);
+    g.fillRoundedRect(x - w/2 - 2, y - h/2 - 2, w + 4, h + 4, 3);
+
+    g.fillStyle(frameColor);
+    g.fillRoundedRect(x - w/2, y - h/2, w, h, 3);
+
+    g.fillStyle(innerColor);
+    g.fillRoundedRect(x - w/2 + 2, y - h/2 + 2, w - 4, h - 4, 2);
+
+    g.fillStyle(0x000000, 0.12);
+    g.fillRoundedRect(x - w/2 + 4, y - h/2 + 4, w - 8, (h - 10) / 2, 2);
+    g.fillRoundedRect(x - w/2 + 4, y + 1, w - 8, (h - 12) / 2, 2);
+
+    g.fillStyle(accentColor);
+    g.fillCircle(x + w/2 - 5, y + 1, 2);
+
+    g.fillStyle(0xffffff, 0.08);
+    g.fillRect(x - w/2 + 2, y - h/2 + 2, w - 4, 2);
+
+    if (done) {
+      g.fillStyle(0x2ecc71, 0.95);
+      g.fillCircle(x, y - h/2 - 4, 4);
+
+      g.fillStyle(0xffffff, 0.95);
+      g.fillRect(x - 1, y - h/2 - 6, 1.5, 4);
+      g.fillRect(x + 0.5, y - h/2 - 3, 3, -2);
+    }
   }
 
   refreshNodes() {
@@ -1060,11 +1098,21 @@ class DungeonScene extends Phaser.Scene {
 
       if (!info.isDone && isCompleted(n.id)) {
         info.isDone = true;
-        info.door.setFrame(21);
+
+        this.drawDoorNode(
+          info.g,
+          info.x,
+          info.y,
+          info.w,
+          info.h,
+          true
+        );
+
         info.label.setColor('#2ecc71');
+
         info.glow.clear();
-        info.glow.fillStyle(0x2ecc71, 0.07);
-        info.glow.fillCircle(info.x, info.y, n.sz === 2 ? 16 : 13);
+        info.glow.fillStyle(0x2ecc71, 0.08);
+        info.glow.fillCircle(info.x, info.y + 3, n.sz === 2 ? 15 : 12);
       }
     });
   }
@@ -1310,9 +1358,6 @@ class DungeonScene extends Phaser.Scene {
   }
 }
 
-/* =========================
-   INIT
-========================= */
 updateHUD();
 
 new Phaser.Game({
