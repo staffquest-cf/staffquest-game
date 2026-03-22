@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<title>StaffQuest Dungeon</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:#07070f;font-family:monospace;}
+body{display:flex;flex-direction:column;align-items:center;}
+#root{position:relative;width:100%;max-width:390px;height:100%;display:flex;flex-direction:column;}
+#ga{position:relative;flex:1;min-height:0;overflow:hidden;background:#07070f;}
+#ga canvas{display:block!important;image-rendering:pixelated;image-rendering:crisp-edges;}
+#hud{position:absolute;top:0;left:0;right:0;padding:6px 10px;pointer-events:none;z-index:20;display:flex;justify-content:space-between;align-items:flex-start;gap:6px;}
+.hb{background:rgba(5,13,36,.92);border:1px solid rgba(245,200,66,.3);border-radius:8px;padding:5px 9px;}
+.hn{font-size:10px;font-weight:bold;color:#f5c842;}
+.hx{font-size:8px;color:#5a9a5a;margin-top:2px;}
+.xbar{background:#1a1a0a;border-radius:3px;height:4px;width:80px;margin-top:3px;overflow:hidden;}
+.xfill{height:100%;background:#f5c842;border-radius:3px;transition:width .4s;}
+.hw{font-size:8px;color:#8888aa;text-align:right;line-height:1.6;}
+#toast{position:absolute;bottom:56px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.92);color:#ccc;font-size:9px;padding:5px 14px;border-radius:20px;border:1px solid #2a2a3a;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap;z-index:15;max-width:90%;text-align:center;}
+#badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:rgba(4,4,18,.97);border:2px solid #f5c842;border-radius:14px;padding:18px 24px;z-index:35;text-align:center;transition:transform .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
+#badge.show{transform:translate(-50%,-50%) scale(1);}
+#badge .bi{font-size:36px;display:block;margin-bottom:6px;}
+#badge .bt{font-size:12px;font-weight:bold;color:#f5c842;}
+#badge .bs{font-size:9px;color:#aaa;margin-top:3px;}
+#dialog{position:absolute;bottom:0;left:0;right:0;background:rgba(4,4,18,.97);border-top:2px solid #f5c842;padding:12px 14px 14px;z-index:25;display:none;}
+#dt{font-size:10px;font-weight:bold;color:#f5c842;margin-bottom:4px;}
+#db{font-size:9px;color:#ccd;margin-bottom:10px;line-height:1.5;}
+.dlg-btn{display:block;width:100%;background:#0c0c24;border:1px solid rgba(255,255,255,.12);border-radius:7px;padding:8px 10px;font-size:9px;color:#aabbd0;text-align:left;cursor:pointer;margin-bottom:6px;font-family:monospace;line-height:1.4;touch-action:manipulation;}
+.dlg-btn:last-child{margin-bottom:0;}
+.dlg-btn:active{background:rgba(245,200,66,.1);border-color:#f5c842;color:#f5c842;}
+#ctl{position:absolute;bottom:6px;left:0;right:0;display:flex;align-items:flex-end;justify-content:space-between;padding:0 10px;z-index:12;pointer-events:none;}
+#joy{width:90px;height:90px;pointer-events:auto;position:relative;touch-action:none;}
+#jb{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.12);}
+#jk{position:absolute;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.28);top:50%;left:50%;transform:translate(-50%,-50%);}
+#bok{width:56px;height:56px;border-radius:50%;background:rgba(245,200,66,.1);border:2px solid #f5c842;pointer-events:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;touch-action:none;}
+#bok .ol{font-size:9px;font-weight:bold;color:#f5c842;}
+#bok .oh{font-size:7px;color:#555577;margin-top:1px;}
+#charbar{background:#07071a;border-top:1px solid #181830;padding:5px 8px;display:flex;gap:5px;flex-shrink:0;}
+.cv{flex:1;background:#0c0c22;border:1px solid #181830;border-radius:8px;padding:5px 3px;text-align:center;cursor:pointer;touch-action:manipulation;}
+.cv.active{border-color:#f5c842;background:#121228;}
+.cvn{font-size:10px;font-weight:bold;color:#f5c842;}
+.cvc{font-size:8px;color:#55557a;margin-top:1px;}
+.cvx{font-size:8px;color:#5a9a5a;margin-top:2px;}
+</style>
+</head>
+<body>
+<div id="root">
+  <div id="ga">
+    <div id="hud">
+      <div class="hb"><div class="hn" id="hn">Loading...</div><div class="hx" id="hx">XP 0</div><div class="xbar"><div class="xfill" id="xf" style="width:0%"></div></div></div>
+      <div class="hb"><div class="hw" id="hw">Dungeon<br>L'Alba</div></div>
+    </div>
+    <div id="toast"></div>
+    <div id="badge"><span class="bi" id="bi"></span><div class="bt" id="bt"></div><div class="bs" id="bs"></div></div>
+    <div id="dialog"><div id="dt"></div><div id="db"></div><div id="dc"></div></div>
+    <div id="ctl">
+      <div id="joy"><div id="jb"></div><div id="jk"></div></div>
+      <div id="bok"><div class="ol">OK</div><div class="oh" id="oh">esplora</div></div>
+    </div>
+  </div>
+  <div id="charbar">
+    <div class="cv active" id="cm" onclick="selC('mario')"><div class="cvn">&#9876; Mario</div><div class="cvc">Guerriero</div><div class="cvx" id="xm">0 XP</div></div>
+    <div class="cv" id="cs" onclick="selC('sara')"><div class="cvn">&#10022; Sara</div><div class="cvc">Maga</div><div class="cvx" id="xs">0 XP</div></div>
+    <div class="cv" id="cl" onclick="selC('luca')"><div class="cvn">&#9834; Luca</div><div class="cvc">Bardo</div><div class="cvx" id="xl">0 XP</div></div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+<script>
+const TW=16,GW=15,GH=22,SCALE=3;
+const CMAP=[[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 3, 3, 3, 1, 1, 1, 3, 3, 3, 1, 1, 2], [2, 1, 1, 3, 3, 3, 1, 1, 1, 3, 3, 3, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 1, 1, 2, 2, 2], [2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2], [2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 3, 3, 1, 1, 1, 1, 1, 3, 3, 1, 1, 2], [2, 1, 1, 3, 3, 1, 1, 4, 4, 1, 3, 3, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2]];
+const QUESTS=[{"id": "q1", "title": "Apertura Locale", "body": "Sono le 8:00. Senti odore di gas vicino ai fornelli. Cosa fai prima di tutto?", "choices": [{"t": "Chiudo il gas, apro le finestre, chiamo il responsabile", "ok": true, "fb": "Corretto! Gas off + ventilazione + comunicazione = sequenza sicura."}, {"t": "Accendo i fornelli per controllare", "ok": false, "fb": "MAI accendere con odore di gas. Rischio esplosione."}, {"t": "Aspetto che passi da solo", "ok": false, "fb": "Non aspettare mai. Agisci subito."}]}, {"id": "q2", "title": "Servizio Sala", "body": "Un cliente ha un allergia alle noci. Come gestisci l ordine?", "choices": [{"t": "Segno sulla comanda e avviso subito la cucina", "ok": true, "fb": "Perfetto! Comunicazione preventiva salva vite."}, {"t": "Evito solo le noci nel suo piatto", "ok": false, "fb": "La contaminazione crociata e il vero rischio."}, {"t": "Ci penso dopo quando arriva l ordine", "ok": false, "fb": "Troppo tardi! L allergia si gestisce prima."}]}, {"id": "q3", "title": "Gestione Reclamo", "body": "Un cliente trova un capello nel piatto. Cosa fai?", "choices": [{"t": "Mi scuso, ritiro il piatto e chiamo il responsabile", "ok": true, "fb": "Esatto! Scuse + azione + escalation corretta."}, {"t": "Dico che non e possibile", "ok": false, "fb": "Non negare mai. Gestisci con calma."}, {"t": "Offro uno sconto e vado via", "ok": false, "fb": "Lo sconto non basta. Serve il responsabile."}]}];
+const CHESTS=[{col:3,row:3,qid:'q1',solved:false},{col:10,row:3,qid:'q2',solved:false},{col:3,row:13,qid:'q3',solved:false}];
+const PORTAL={col:7,row:20};
+const CHARS={mario:{n:'Mario',c:'Guerriero',col:0xcc3322,acc:0xff6644,xp:0,bdg:0},sara:{n:'Sara',c:'Maga',col:0x6633cc,acc:0xaa66ff,xp:0,bdg:0},luca:{n:'Luca',c:'Bardo',col:0x2255aa,acc:0x55aaff,xp:0,bdg:0}};
+let ACT='mario',dlgOpen=false;
+const sqUser=(()=>{try{return JSON.parse(sessionStorage.getItem('sq_user')||'null');}catch(e){return null;}})();
+if(sqUser){CHARS.mario.n=sqUser.nome||'Mario';CHARS.mario.xp=sqUser.xp||0;if(sqUser.ruolo==='Barista')ACT='sara';else if(sqUser.ruolo==='Cameriere'||sqUser.ruolo==='Sala')ACT='luca';}
+function selC(id){ACT=id;['mario','sara','luca'].forEach(k=>{document.getElementById('c'+k[0])?.classList.toggle('active',k===id);});updHUD();window._psc?.switchChar(id);}
+function updHUD(){const ch=CHARS[ACT];document.getElementById('hn').textContent=ch.n+' '+ch.c;document.getElementById('hx').textContent='XP '+ch.xp;document.getElementById('xf').style.width=Math.min((ch.xp/300)*100,100)+'%';['mario','sara','luca'].forEach(k=>{const e=document.getElementById('x'+k[0]);if(e)e.textContent=CHARS[k].xp+' XP';});}
+function toast(msg,dur=2600){const el=document.getElementById('toast');el.textContent=msg;el.style.opacity='1';clearTimeout(window._tt);window._tt=setTimeout(()=>el.style.opacity='0',dur);}
+function showBadge(e,t,s){document.getElementById('bi').textContent=e;document.getElementById('bt').textContent=t;document.getElementById('bs').textContent=s;const el=document.getElementById('badge');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600);}
+function checkBadge(){const xp=CHARS[ACT].xp;if(xp>=100&&CHARS[ACT].bdg<1){CHARS[ACT].bdg=1;setTimeout(()=>showBadge('&#129353;','Badge Bronzo!','Prime sfide superate.'),700);}if(xp>=250&&CHARS[ACT].bdg<2){CHARS[ACT].bdg=2;setTimeout(()=>showBadge('&#129352;','Badge Argento!','Stai crescendo!'),700);}if(xp>=500&&CHARS[ACT].bdg<3){CHARS[ACT].bdg=3;setTimeout(()=>showBadge('&#129351;','Badge Oro!','Maestro del dungeon!'),700);}}
+
+class Dungeon extends Phaser.Scene{
+  constructor(){super('Dungeon');}
+  preload(){
+    this.load.spritesheet('wf','assets/walls_floor.png',{frameWidth:TW,frameHeight:TW});
+    this.load.spritesheet('fire','assets/fire_animation2.png',{frameWidth:TW,frameHeight:TW});
+    const W=this.cameras.main.width,H=this.cameras.main.height;
+    const bar=this.add.graphics();
+    this.load.on('progress',v=>{bar.clear();bar.fillStyle(0x1a1a2e);bar.fillRect(W/2-80,H/2-10,160,20);bar.fillStyle(0xf5c842);bar.fillRect(W/2-80,H/2-10,160*v,20);});
+    this.load.on('complete',()=>{bar.destroy();});
+  }
+  create(){
+    window._psc=this;
+    this.jv={x:0,y:0};this.jActive=false;
+    this.dir='down';this.wt=0;this.wf=0;this.ft=0;this.ff=0;
+    this.near=null;this.dlgOpen=false;
+    this._buildMap();
+    this._spawnPlayer();
+    this._spawnObjects();
+    this._inputSetup();
+    this._joySetup();
+    this._okSetup();
+    this.cameras.main.startFollow(this.pp,true,0.1,0.1);
+    this.cameras.main.setZoom(SCALE);
+    this.cameras.main.setBounds(0,0,GW*TW,GH*TW);
+    toast('Avvicinati ai forzieri e premi OK!');
+    updHUD();
+  }
+  _buildMap(){
+    const FLOOR=[3*13+3,4*13+3,4*13+4,4*13+5,4*13+6,4*13+7];
+    const FALT=[6*13+3,6*13+4,6*13+5];
+    const WALL=[0,1,2,3,13,14,15,7*13,7*13+1,8*13,8*13+1];
+    const rng=(s)=>{let x=s;return()=>{x=(x*1664525+1013904223)&0xffffffff;return Math.abs(x);}};
+    const r=rng(42);
+    for(let row=0;row<GH;row++){
+      for(let col=0;col<GW;col++){
+        const cell=CMAP[row][col];
+        const x=col*TW+TW/2,y=row*TW+TW/2;
+        if(cell===2){
+          this.add.image(x,y,'wf',WALL[r()%WALL.length]).setDepth(0);
+        }else if(cell===4){
+          const g=this.add.graphics().setDepth(0);
+          g.fillStyle(0x1a3a8a,1);g.fillRect(col*TW,row*TW,TW,TW);
+          g.fillStyle(0x2255cc,0.5);g.fillRect(col*TW+2,row*TW+2,TW-4,TW-4);
+        }else if(cell===3){
+          this.add.image(x,y,'wf',FALT[r()%FALT.length]).setDepth(0);
+        }else{
+          this.add.image(x,y,'wf',FLOOR[r()%FLOOR.length]).setDepth(0);
+        }
+      }
+    }
+  }
+  _spawnObjects(){
+    this.chestGfx=[];
+    CHESTS.forEach((ch,i)=>{
+      const g=this.add.graphics().setDepth(3);
+      this._drawChest(g,ch.col,ch.row,ch.solved);
+      this.chestGfx.push(g);
+    });
+    this.torches=[];
+    [[4,1],[10,1],[1,6],[13,6],[1,11],[13,11]].forEach(([c,r])=>{
+      const t=this.add.image(c*TW+TW/2,r*TW+TW/2,'fire',0).setDepth(3).setScale(1.4);
+      this.torches.push(t);
+    });
+    [[12,2],[1,9],[13,9]].forEach(([c,r])=>{
+      const g=this.add.graphics().setDepth(2);
+      const x=c*TW+TW/2,y=r*TW+TW/2;
+      g.fillStyle(0x6b3311);g.fillRect(x-5,y-8,10,16);
+      g.fillStyle(0xc8921a);g.fillRect(x-5,y-4,10,2);g.fillRect(x-5,y+2,10,2);
+    });
+    this.portalGfx=this.add.graphics().setDepth(2);
+    this.inters=[];
+    CHESTS.forEach((ch,i)=>{this.inters.push({x:ch.col*TW+TW/2,y:ch.row*TW+TW/2,type:'chest',idx:i,lbl:ch.solved?'Fatto':'Sfida!'});});
+    this.inters.push({x:PORTAL.col*TW+TW/2,y:PORTAL.row*TW+TW/2,type:'portal',lbl:'Avanza'});
+  }
+  _drawChest(g,col,row,solved){
+    g.clear();
+    const x=col*TW+TW/2,y=row*TW+TW/2;
+    if(solved){
+      g.fillStyle(0x7a3a0a);g.fillRect(x-7,y-4,14,9);
+      g.fillStyle(0xc8921a);g.fillRect(x-6,y-2,12,3);
+      g.fillStyle(0xf5c842,0.7);g.fillCircle(x,y,2);
+    }else{
+      g.fillStyle(0x8B4513);g.fillRect(x-7,y-6,14,12);
+      g.fillStyle(0xD4A520);g.fillRect(x-7,y-1,14,2);
+      g.fillStyle(0xf5c842);g.fillCircle(x,y,2.5);
+      g.fillStyle(0xf5c842,0.15);g.fillCircle(x,y,TW*0.9);
+    }
+  }
+  _spawnPlayer(){
+    this.pgfx=this.add.graphics().setDepth(10);
+    this.pp=this.physics.add.image(GW/2*TW,GH/2*TW,'wf',67).setDisplaySize(10,14).setAlpha(0).setCollideWorldBounds(true).setMaxVelocity(80,80);
+    this.ptag=this.add.text(0,0,'',{fontSize:'6px',color:'#f5c842',fontFamily:'monospace',backgroundColor:'#00000099',padding:{x:2,y:1}}).setOrigin(0.5,1).setDepth(11);
+    this.switchChar(ACT);
+  }
+  switchChar(id){
+    const ch=CHARS[id];const g=this.pgfx;g.clear();
+    const f=this.wf%2,col=ch.col,acc=ch.acc;
+    if(id==='mario'){
+      g.fillStyle(0xf5d4a0);g.fillCircle(0,-9,5);
+      g.fillStyle(0x111);g.fillCircle(-1.5,-10,1.2);g.fillCircle(1.5,-10,1.2);
+      g.fillStyle(col);g.fillRect(-5,-3,10,10);
+      g.fillStyle(acc);g.fillRect(-5,-16,10,8);
+      g.fillStyle(0x8899aa);g.fillRect(-4,-15,8,5);
+      g.fillStyle(0xbbccdd);g.fillRect(5,-8,2,14);
+      g.fillStyle(0xf5c842);g.fillRect(3,-9,6,2);
+      g.fillStyle(0x8899aa);
+      if(f===0){g.fillRect(-5,7,4,8);g.fillRect(1,7,4,6);}else{g.fillRect(-5,7,4,6);g.fillRect(1,7,4,8);}
+    }else if(id==='sara'){
+      g.fillStyle(0xf5d4a0);g.fillCircle(0,-9,5);
+      g.fillStyle(0x111);g.fillCircle(-1.5,-10,1.2);g.fillCircle(1.5,-10,1.2);
+      g.fillStyle(col);g.fillRect(-4,-4,8,14);
+      g.fillStyle(acc);g.fillTriangle(-7,-15,7,-15,0,-24);
+      g.fillStyle(0x6b3a2a);g.fillRect(-10,-20,2,26);
+      g.fillStyle(acc);g.fillCircle(-9,-22,5);
+    }else{
+      g.fillStyle(0xf5d4a0);g.fillCircle(0,-9,5);
+      g.fillStyle(0x111);g.fillCircle(-1.5,-10,1.2);g.fillCircle(1.5,-10,1.2);
+      g.fillStyle(col);g.fillRect(-4,-3,8,13);
+      g.fillStyle(acc);g.fillRect(-5,-17,10,7);
+      g.fillStyle(0xffffaa);g.fillTriangle(4,-19,10,-12,7,-12);
+      g.fillStyle(0x7a4a18);g.fillEllipse(9,5,9,12);
+      if(f===0){g.fillRect(-5,10,4,7);g.fillRect(1,10,4,5);}else{g.fillRect(-5,10,4,5);g.fillRect(1,10,4,7);}
+    }
+    this.ptag?.setText(ch.n);updHUD();
+  }
+  _isWall(c,r){if(r<0||r>=GH||c<0||c>=GW)return true;return CMAP[r][c]===2;}
+  _inputSetup(){this.curs=this.input.keyboard.createCursorKeys();this.wk=this.input.keyboard.addKeys({up:'W',dn:'S',lt:'A',rt:'D'});this.spc=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);}
+  _joySetup(){
+    const jw=document.getElementById('joy'),jk=document.getElementById('jk');
+    if(!jw)return;const R=28;
+    const xy=e=>{const t=e.touches?e.touches[0]:e,r=jw.getBoundingClientRect();return{x:t.clientX-r.left-r.width/2,y:t.clientY-r.top-r.height/2};};
+    const start=e=>{e.preventDefault();this.jActive=true;};
+    const move=e=>{if(!this.jActive)return;e.preventDefault();const pt=xy(e),d=Math.sqrt(pt.x*pt.x+pt.y*pt.y),cl=Math.min(d,R),a=Math.atan2(pt.y,pt.x);const cx=Math.cos(a)*cl,cy=Math.sin(a)*cl;jk.style.transform=`translate(calc(-50% + ${cx}px),calc(-50% + ${cy}px))`;this.jv={x:cx/R,y:cy/R};};
+    const end=()=>{this.jActive=false;this.jv={x:0,y:0};jk.style.transform='translate(-50%,-50%)';};
+    jw.addEventListener('touchstart',start,{passive:false});jw.addEventListener('touchmove',move,{passive:false});jw.addEventListener('touchend',end,{passive:false});
+    jw.addEventListener('mousedown',start);window.addEventListener('mousemove',e=>{if(this.jActive)move(e);});window.addEventListener('mouseup',end);
+  }
+  _okSetup(){
+    const btn=document.getElementById('bok');if(!btn)return;
+    btn.addEventListener('touchstart',e=>{e.preventDefault();this._interact();},{passive:false});
+    btn.addEventListener('mousedown',()=>this._interact());
+  }
+  _interact(){if(dlgOpen||!this.near)return;if(this.near.type==='portal'){toast('Hai completato il dungeon! Torna al menu.');return;}if(this.near.type==='chest')this._openQuest(this.near.idx);}
+  _openQuest(idx){
+    const ch=CHESTS[idx];if(ch.solved){toast('Gia superata! Cerca gli altri forzieri.');return;}
+    const q=QUESTS.find(q=>q.id===ch.qid);if(!q)return;
+    dlgOpen=true;this.dlgOpen=true;
+    document.getElementById('dt').textContent='Sfida: '+q.title;
+    document.getElementById('db').textContent=q.body;
+    const ce=document.getElementById('dc');ce.innerHTML='';
+    q.choices.forEach(c=>{const btn=document.createElement('button');btn.className='dlg-btn';btn.textContent=c.t;btn.onclick=()=>this._answer(idx,c);ce.appendChild(btn);});
+    document.getElementById('dialog').style.display='block';
+  }
+  _answer(idx,c){
+    document.getElementById('dc').innerHTML='';
+    const dt=document.getElementById('dt'),db=document.getElementById('db');
+    if(c.ok){
+      const gain=30+Math.floor(Math.random()*20);CHARS[ACT].xp+=gain;updHUD();checkBadge();
+      CHESTS[idx].solved=true;this._drawChest(this.chestGfx[idx],CHESTS[idx].col,CHESTS[idx].row,true);
+      const inter=this.inters.find(i=>i.type==='chest'&&i.idx===idx);if(inter)inter.lbl='Fatto';
+      dt.style.color='#7ac84a';dt.textContent='Corretto! +'+gain+' XP';
+      if(sqUser)this._saveXP();
+    }else{dt.style.color='#e74c3c';dt.textContent='Sbagliato!';}
+    db.textContent=c.fb;
+    setTimeout(()=>{document.getElementById('dialog').style.display='none';dt.style.color='#f5c842';dlgOpen=false;this.dlgOpen=false;},2200);
+  }
+  async _saveXP(){
+    try{await fetch('https://api.airtable.com/v0/appc3kRop4WSftpC3/Profili_Dipendenti%20-%20Staffquest/'+sqUser.id,{method:'PATCH',headers:{Authorization:'Bearer patkd1CkZnGbrkGhi.7b444f999da251236d952814b8d6a29e507586f9718739e4a7ae18b3947b65d0','Content-Type':'application/json'},body:JSON.stringify({fields:{'XP Totale':CHARS[ACT].xp,'Ultima Sessione':new Date().toISOString().slice(0,10)}})});}catch(e){console.log('xp:',e);}
+  }
+  update(time,delta){
+    this.ft+=delta;if(this.ft>180){this.ft=0;this.ff=(this.ff+1)%6;this.torches?.forEach(t=>t.setFrame(this.ff));}
+    const pa=0.5+0.5*Math.sin(time/600);
+    const g=this.portalGfx;g.clear();const px2=PORTAL.col*TW+TW/2,py2=PORTAL.row*TW+TW/2;
+    g.fillStyle(0x6633cc,0.25*pa);g.fillCircle(px2,py2,TW);g.lineStyle(2,0xaa66ff,0.8*pa);g.strokeCircle(px2,py2,TW);g.fillStyle(0xaa66ff,0.5*pa);g.fillCircle(px2,py2,4);
+    if(this.dlgOpen){this.pp.setVelocity(0,0);return;}
+    const spd=70;let vx=0,vy=0;
+    if(this.curs.left.isDown||this.wk.lt.isDown){vx=-spd;}if(this.curs.right.isDown||this.wk.rt.isDown){vx=spd;}if(this.curs.up.isDown||this.wk.up.isDown){vy=-spd;}if(this.curs.down.isDown||this.wk.dn.isDown){vy=spd;}
+    if(this.jActive&&(Math.abs(this.jv.x)>.12||Math.abs(this.jv.y)>.12)){vx=this.jv.x*spd;vy=this.jv.y*spd;}
+    const M=5,ppx=this.pp.x,ppy=this.pp.y,dt=delta/1000;
+    if(this._isWall(Math.floor((ppx+vx*dt-M)/TW),Math.floor(ppy/TW))||this._isWall(Math.floor((ppx+vx*dt+M)/TW),Math.floor(ppy/TW)))vx=0;
+    if(this._isWall(Math.floor(ppx/TW),Math.floor((ppy+vy*dt-M)/TW))||this._isWall(Math.floor(ppx/TW),Math.floor((ppy+vy*dt+M)/TW)))vy=0;
+    this.pp.setVelocity(vx,vy);
+    this.pgfx.x=this.pp.x;this.pgfx.y=this.pp.y;this.ptag.x=this.pp.x;this.ptag.y=this.pp.y-18;
+    if(vx!==0||vy!==0){this.wt+=delta;if(this.wt>260){this.wt=0;this.wf++;this.switchChar(ACT);}}
+    let near=null,nd=9999;
+    this.inters.forEach(o=>{const d=Phaser.Math.Distance.Between(this.pp.x,this.pp.y,o.x,o.y);if(d<28&&d<nd){near=o;nd=d;}});
+    this.near=near;
+    const ok=document.getElementById('bok'),oh=document.getElementById('oh');
+    if(ok){ok.style.opacity=near?'1':'0.35';if(oh)oh.textContent=near?near.lbl:'esplora';}
+    if(near&&Phaser.Input.Keyboard.JustDown(this.spc))this._interact();
+  }
+}
+new Phaser.Game({type:Phaser.AUTO,parent:'ga',backgroundColor:'#07070f',physics:{default:'arcade',arcade:{gravity:{y:0},debug:false}},scene:[Dungeon],scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH,width:GW*TW,height:GH*TW,parent:'ga'}});
+</script>
+</body>
+</html>
