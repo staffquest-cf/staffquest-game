@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -153,211 +152,210 @@ var AT_TOKEN='patkd1CkZnGbrkGhi.7b444f999da251236d952814b8d6a29e507586f9718739e4
 var AT_BASE='appc3kRop4WSftpC3';
 var AT_URL_U='https://api.airtable.com/v0/'+AT_BASE+'/Profili_Dipendenti%20-%20Staffquest';
 var AT_H={Authorization:'Bearer '+AT_TOKEN,'Content-Type':'application/json'};
-
-var MAP_NODES={“Cameriere”: [{“id”: “ap”, “label”: “Apertura\ne Chiusura”, “x”: 50, “y”: 12, “size”: “large”, “connections”: [“pul”, “ser”]}, {“id”: “pul”, “label”: “Pulizia\ne Bagni”, “x”: 22, “y”: 36, “size”: “medium”, “connections”: [“acc”]}, {“id”: “ser”, “label”: “Servizio\nSala”, “x”: 78, “y”: 36, “size”: “medium”, “connections”: [“rec”]}, {“id”: “acc”, “label”: “Accoglienza\nPrenotazioni”, “x”: 22, “y”: 65, “size”: “medium”, “connections”: [“rec”]}, {“id”: “rec”, “label”: “Gestione\nReclami”, “x”: 50, “y”: 82, “size”: “large”, “connections”: []}], “Cuoco”: [{“id”: “ap”, “label”: “Apertura\ne Chiusura”, “x”: 50, “y”: 12, “size”: “large”, “connections”: [“pul”, “pre”]}, {“id”: “pul”, “label”: “Pulizia e\nOrganizzazione”, “x”: 22, “y”: 38, “size”: “medium”, “connections”: [“ser”]}, {“id”: “pre”, “label”: “Preparazioni\nMise en Place”, “x”: 78, “y”: 38, “size”: “medium”, “connections”: [“ser”]}, {“id”: “ser”, “label”: “Servizio\nCucina”, “x”: 50, “y”: 62, “size”: “large”, “connections”: [“prob”]}, {“id”: “prob”, “label”: “Gestione\nProblemi”, “x”: 50, “y”: 84, “size”: “medium”, “connections”: []}], “Barista”: [{“id”: “ap”, “label”: “Apertura\ne Chiusura”, “x”: 50, “y”: 10, “size”: “large”, “connections”: [“pul”, “mag”]}, {“id”: “pul”, “label”: “Pulizia\nOrg. Bagno”, “x”: 20, “y”: 35, “size”: “small”, “connections”: [“pre”]}, {“id”: “mag”, “label”: “Magazzino”, “x”: 80, “y”: 35, “size”: “small”, “connections”: [“pre”]}, {“id”: “pre”, “label”: “Preparazioni”, “x”: 50, “y”: 57, “size”: “medium”, “connections”: [“ser”]}, {“id”: “ser”, “label”: “Servizio\nBar”, “x”: 30, “y”: 78, “size”: “medium”, “connections”: [“rec”]}, {“id”: “rec”, “label”: “Gestione\nReclami”, “x”: 72, “y”: 78, “size”: “small”, “connections”: []}]};
-var PERC_MAP={“Cameriere”: {“Apertura e Chiusura”: “ap”, “Pulizia e Bagni”: “pul”, “Servizio Sala”: “ser”, “Accoglienza e Prenotazioni”: “acc”, “Gestione Reclami”: “rec”}, “Cuoco”: {“Apertura e Chiusura”: “ap”, “Pulizia e Organizzazione”: “pul”, “Preparazioni Mise en Place”: “pre”, “Servizio Cucina”: “ser”, “Gestione Problemi”: “prob”}, “Barista”: {“Apertura e Chiusura”: “ap”, “Pulizia Organizzazione e Bagno”: “pul”, “Magazzino”: “mag”, “Preparazioni”: “pre”, “Servizio Bar”: “ser”, “Gestione Reclami”: “rec”}, “Sala”: {“Apertura e Chiusura”: “ap”, “Pulizia e Bagni”: “pul”, “Servizio Sala”: “ser”, “Accoglienza e Prenotazioni”: “acc”, “Gestione Reclami”: “rec”}, “Cucina”: {“Apertura e Chiusura”: “ap”, “Pulizia e Organizzazione”: “pul”, “Preparazioni Mise en Place”: “pre”, “Servizio Cucina”: “ser”, “Gestione Problemi”: “prob”}};
-var SIZES={large:‘img-large’,medium:‘img-medium’,small:‘img-small’};
-
+ 
+var MAP_NODES={"Cameriere": [{"id": "ap", "label": "Apertura\ne Chiusura", "x": 50, "y": 12, "size": "large", "connections": ["pul", "ser"]}, {"id": "pul", "label": "Pulizia\ne Bagni", "x": 22, "y": 36, "size": "medium", "connections": ["acc"]}, {"id": "ser", "label": "Servizio\nSala", "x": 78, "y": 36, "size": "medium", "connections": ["rec"]}, {"id": "acc", "label": "Accoglienza\nPrenotazioni", "x": 22, "y": 65, "size": "medium", "connections": ["rec"]}, {"id": "rec", "label": "Gestione\nReclami", "x": 50, "y": 82, "size": "large", "connections": []}], "Cuoco": [{"id": "ap", "label": "Apertura\ne Chiusura", "x": 50, "y": 12, "size": "large", "connections": ["pul", "pre"]}, {"id": "pul", "label": "Pulizia e\nOrganizzazione", "x": 22, "y": 38, "size": "medium", "connections": ["ser"]}, {"id": "pre", "label": "Preparazioni\nMise en Place", "x": 78, "y": 38, "size": "medium", "connections": ["ser"]}, {"id": "ser", "label": "Servizio\nCucina", "x": 50, "y": 62, "size": "large", "connections": ["prob"]}, {"id": "prob", "label": "Gestione\nProblemi", "x": 50, "y": 84, "size": "medium", "connections": []}], "Barista": [{"id": "ap", "label": "Apertura\ne Chiusura", "x": 50, "y": 10, "size": "large", "connections": ["pul", "mag"]}, {"id": "pul", "label": "Pulizia\nOrg. Bagno", "x": 20, "y": 35, "size": "small", "connections": ["pre"]}, {"id": "mag", "label": "Magazzino", "x": 80, "y": 35, "size": "small", "connections": ["pre"]}, {"id": "pre", "label": "Preparazioni", "x": 50, "y": 57, "size": "medium", "connections": ["ser"]}, {"id": "ser", "label": "Servizio\nBar", "x": 30, "y": 78, "size": "medium", "connections": ["rec"]}, {"id": "rec", "label": "Gestione\nReclami", "x": 72, "y": 78, "size": "small", "connections": []}]};
+var PERC_MAP={"Cameriere": {"Apertura e Chiusura": "ap", "Pulizia e Bagni": "pul", "Servizio Sala": "ser", "Accoglienza e Prenotazioni": "acc", "Gestione Reclami": "rec"}, "Cuoco": {"Apertura e Chiusura": "ap", "Pulizia e Organizzazione": "pul", "Preparazioni Mise en Place": "pre", "Servizio Cucina": "ser", "Gestione Problemi": "prob"}, "Barista": {"Apertura e Chiusura": "ap", "Pulizia Organizzazione e Bagno": "pul", "Magazzino": "mag", "Preparazioni": "pre", "Servizio Bar": "ser", "Gestione Reclami": "rec"}, "Sala": {"Apertura e Chiusura": "ap", "Pulizia e Bagni": "pul", "Servizio Sala": "ser", "Accoglienza e Prenotazioni": "acc", "Gestione Reclami": "rec"}, "Cucina": {"Apertura e Chiusura": "ap", "Pulizia e Organizzazione": "pul", "Preparazioni Mise en Place": "pre", "Servizio Cucina": "ser", "Gestione Problemi": "prob"}};
+var SIZES={large:'img-large',medium:'img-medium',small:'img-small'};
+ 
 // PROCEDURE DEMO — hardcodate, funzionano sempre senza Airtable
-var DEMO={“Apertura e Chiusura”: [{“id”: “d1”, “titolo”: “Apertura del locale”, “livello”: “Base”, “percorso”: “Apertura e Chiusura”, “scenario”: “Sono le 8:00 di mattina. Sei il primo ad arrivare al ristorante.”, “quiz”: [{“domanda”: “Prima di aprire controlli le luci. Cosa fai subito dopo?”, “opzioni”: [“Accendo tutto e aspetto i colleghi”, “Controllo uscite di emergenza e frigo”, “Preparo il caffè”, “Chiamo il responsabile”], “risposta_corretta”: “Controllo uscite di emergenza e frigo”}, {“domanda”: “Il frigo segna 6°C invece di 4°C. Cosa fai?”, “opzioni”: [“Aspetto che scenda da solo”, “Abbasso il termostato e registro la temperatura”, “Svuoto il frigo”, “Non faccio niente”], “risposta_corretta”: “Abbasso il termostato e registro la temperatura”}, {“domanda”: “Devi indossare la divisa. Noti una macchia. Cosa fai?”, “opzioni”: [“La indosso lo stesso, tanto sono in cucina”, “Metto un grembiule sopra”, “Cambio con una divisa pulita”, “Pulisco la macchia con acqua”], “risposta_corretta”: “Cambio con una divisa pulita”}, {“domanda”: “Senti odore di gas vicino ai fornelli. Prima cosa?”, “opzioni”: [“Accendo i fornelli per controllare”, “Chiudo il gas, apro le finestre, chiamo il responsabile”, “Aspetto 5 minuti”, “Accendo la cappa”], “risposta_corretta”: “Chiudo il gas, apro le finestre, chiamo il responsabile”}, {“domanda”: “Devi firmare il registro HACCP. Quando lo fai?”, “opzioni”: [“Solo se ci sono problemi”, “Ogni settimana”, “Ogni mattina prima di iniziare”, “Quando lo chiede il responsabile”], “risposta_corretta”: “Ogni mattina prima di iniziare”}]}], “Servizio Sala”: [{“id”: “d2”, “titolo”: “Gestione ordini al tavolo”, “livello”: “Intermedio”, “percorso”: “Servizio Sala”, “scenario”: “È sabato sera, il locale è pieno. Hai 4 tavoli da gestire.”, “quiz”: [{“domanda”: “Un cliente chiede un piatto non più disponibile. Cosa fai?”, “opzioni”: [“Dico "non ce l’abbiamo" e vado via”, “Mi scuso, spiego e propongo un’alternativa simile”, “Dico al cliente di scegliere altro senza spiegare”, “Invento una scusa”], “risposta_corretta”: “Mi scuso, spiego e propongo un’alternativa simile”}, {“domanda”: “Il cliente ha un’allergia alle noci. Come gestisci l’ordine?”, “opzioni”: [“Segno sulla comanda e avviso subito la cucina”, “Ci penso dopo quando arriva l’ordine”, “Evito solo le noci nel piatto”, “Non è mio compito”], “risposta_corretta”: “Segno sulla comanda e avviso subito la cucina”}, {“domanda”: “Il conto non torna, mancano 10€. Cosa fai?”, “opzioni”: [“Chiudo il conto lo stesso”, “Metto 10€ di tasca mia”, “Riverifco e segnalo al responsabile”, “Ignoro la differenza”], “risposta_corretta”: “Riverifco e segnalo al responsabile”}, {“domanda”: “Un cliente si lamenta che il piatto è freddo. Come rispondi?”, “opzioni”: [“Dico che è normale”, “Mi scuso, ritiro il piatto e avviso la cucina”, “Dico che l’ha mangiato quasi tutto”, “Offro uno sconto senza dirlo al responsabile”], “risposta_corretta”: “Mi scuso, ritiro il piatto e avviso la cucina”}, {“domanda”: “Hai un ritardo di 20 minuti in cucina. Il cliente non lo sa. Cosa fai?”, “opzioni”: [“Aspetto che si lamenti”, “Avviso il cliente subito con stima del tempo”, “Porto del pane e non dico niente”, “Dico che è colpa della cucina”], “risposta_corretta”: “Avviso il cliente subito con stima del tempo”}]}], “Accoglienza e Prenotazioni”: [{“id”: “d3”, “titolo”: “Accoglienza clienti”, “livello”: “Base”, “percorso”: “Accoglienza e Prenotazioni”, “scenario”: “Un cliente entra nel ristorante senza prenotazione.”, “quiz”: [{“domanda”: “Come accogli il cliente all’ingresso?”, “opzioni”: [“Lo ignoro finché non si siede”, “Lo saluto, verifico disponibilità e lo accompagno”, “Gli chiedo di aspettare fuori”, “Lo mando al bancone”], “risposta_corretta”: “Lo saluto, verifico disponibilità e lo accompagno”}, {“domanda”: “Il locale è pieno. Come gestisci il cliente senza prenotazione?”, “opzioni”: [“Dico "è pieno" e chiudo la conversazione”, “Mi scuso, do una stima dell’attesa e chiedo se vuole aspettare”, “Lo metto in lista senza dirgli niente”, “Lo ignoro”], “risposta_corretta”: “Mi scuso, do una stima dell’attesa e chiedo se vuole aspettare”}, {“domanda”: “Una prenotazione cancella all’ultimo minuto. Cosa fai?”, “opzioni”: [“Non faccio niente”, “Avviso subito la cucina e segno nel registro”, “Aspetto che arrivi un altro cliente”, “Segno solo nel registro”], “risposta_corretta”: “Avviso subito la cucina e segno nel registro”}, {“domanda”: “Un cliente telefona per prenotare e ha un’allergia. Cosa noti?”, “opzioni”: [“Solo nome e numero di persone”, “Nome, numero persone e allergia da comunicare alla cucina”, “Solo l’allergia”, “Non prendo nota”], “risposta_corretta”: “Nome, numero persone e allergia da comunicare alla cucina”}, {“domanda”: “Un cliente arriva 30 minuti in ritardo sulla prenotazione. Cosa fai?”, “opzioni”: [“Do il suo tavolo a un altro”, “Mantengo il tavolo se disponibile e lo accolgo normalmente”, “Lo faccio aspettare come punizione”, “Chiamo il responsabile senza far niente”], “risposta_corretta”: “Mantengo il tavolo se disponibile e lo accolgo normalmente”}]}], “Gestione Reclami”: [{“id”: “d4”, “titolo”: “Gestione reclamo cliente”, “livello”: “Avanzato”, “percorso”: “Gestione Reclami”, “scenario”: “Un cliente urla che ha trovato un capello nel piatto davanti a tutti.”, “quiz”: [{“domanda”: “Come reagisci immediatamente?”, “opzioni”: [“Dico che non è possibile”, “Mi scuso sinceramente, ritiro il piatto e avviso il responsabile”, “Offro uno sconto e vado via”, “Accuso la cucina”], “risposta_corretta”: “Mi scuso sinceramente, ritiro il piatto e avviso il responsabile”}, {“domanda”: “Il cliente vuole i soldi indietro. Puoi decidere da solo?”, “opzioni”: [“Sì, offro subito il rimborso”, “No, chiamo il responsabile che ha l’autorità di decidere”, “Dico di no e vado via”, “Ignoro la richiesta”], “risposta_corretta”: “No, chiamo il responsabile che ha l’autorità di decidere”}, {“domanda”: “Dopo aver risolto, cosa fai?”, “opzioni”: [“Non faccio niente, è finita”, “Segnalo l’episodio al responsabile per migliorare”, “Racconto ai colleghi”, “Dimentico”], “risposta_corretta”: “Segnalo l’episodio al responsabile per migliorare”}, {“domanda”: “Un cliente aggressivo alza la voce. Come mantieni la calma?”, “opzioni”: [“Alzo la voce anche io”, “Resto calmo, parlo piano, lo porto in un’area privata”, “Chiamo la sicurezza subito”, “Abbandono il tavolo”], “risposta_corretta”: “Resto calmo, parlo piano, lo porto in un’area privata”}, {“domanda”: “Il reclamo è chiaramente esagerato. Cosa fai?”, “opzioni”: [“Lo dico al cliente”, “Ascolto comunque con rispetto e gestisco professionalmente”, “Chiamo il responsabile senza ascoltare”, “Ignoro”], “risposta_corretta”: “Ascolto comunque con rispetto e gestisco professionalmente”}]}], “Pulizia e Bagni”: [{“id”: “d5”, “titolo”: “Pulizia postazione e bagni”, “livello”: “Base”, “percorso”: “Pulizia e Bagni”, “scenario”: “Fine turno. Devi pulire la sala e i bagni prima di uscire.”, “quiz”: [{“domanda”: “Con quale frequenza controlli i bagni durante il servizio?”, “opzioni”: [“Solo alla fine”, “Ogni 30-45 minuti”, “Solo se un cliente si lamenta”, “Mai, non è mio compito”], “risposta_corretta”: “Ogni 30-45 minuti”}, {“domanda”: “Trovi il bagno senza carta igienica. Cosa fai?”, “opzioni”: [“Aspetto che finisca completamente”, “Sostituisco subito e controllo le riserve”, “Lo segno e aspetto domani”, “Non è mio compito”], “risposta_corretta”: “Sostituisco subito e controllo le riserve”}, {“domanda”: “Qual è l’ordine corretto per pulire i tavoli?”, “opzioni”: [“Prima il pavimento poi i tavoli”, “Prima rimuovo i rifiuti, poi santifico, poi asciugo”, “Prima asciugo poi metto il detergente”, “Non importa l’ordine”], “risposta_corretta”: “Prima rimuovo i rifiuti, poi santifico, poi asciugo”}, {“domanda”: “Hai finito il detergente igienizzante. Cosa fai?”, “opzioni”: [“Pulisco con solo acqua”, “Segnalo al responsabile e utilizzo il prodotto sostitutivo approvato”, “Uso qualsiasi detergente trovo”, “Non pulisco finché non arriva”], “risposta_corretta”: “Segnalo al responsabile e utilizzo il prodotto sostitutivo approvato”}, {“domanda”: “Un collega non ha pulito la sua area. Cosa fai?”, “opzioni”: [“Non faccio niente, non è colpa mia”, “Lo segnalo al responsabile con calma”, “Pulisco io senza dire niente”, “Litigo con il collega”], “risposta_corretta”: “Lo segnalo al responsabile con calma”}]}]};
-
+var DEMO={"Apertura e Chiusura": [{"id": "d1", "titolo": "Apertura del locale", "livello": "Base", "percorso": "Apertura e Chiusura", "scenario": "Sono le 8:00 di mattina. Sei il primo ad arrivare al ristorante.", "quiz": [{"domanda": "Prima di aprire controlli le luci. Cosa fai subito dopo?", "opzioni": ["Accendo tutto e aspetto i colleghi", "Controllo uscite di emergenza e frigo", "Preparo il caffè", "Chiamo il responsabile"], "risposta_corretta": "Controllo uscite di emergenza e frigo"}, {"domanda": "Il frigo segna 6°C invece di 4°C. Cosa fai?", "opzioni": ["Aspetto che scenda da solo", "Abbasso il termostato e registro la temperatura", "Svuoto il frigo", "Non faccio niente"], "risposta_corretta": "Abbasso il termostato e registro la temperatura"}, {"domanda": "Devi indossare la divisa. Noti una macchia. Cosa fai?", "opzioni": ["La indosso lo stesso, tanto sono in cucina", "Metto un grembiule sopra", "Cambio con una divisa pulita", "Pulisco la macchia con acqua"], "risposta_corretta": "Cambio con una divisa pulita"}, {"domanda": "Senti odore di gas vicino ai fornelli. Prima cosa?", "opzioni": ["Accendo i fornelli per controllare", "Chiudo il gas, apro le finestre, chiamo il responsabile", "Aspetto 5 minuti", "Accendo la cappa"], "risposta_corretta": "Chiudo il gas, apro le finestre, chiamo il responsabile"}, {"domanda": "Devi firmare il registro HACCP. Quando lo fai?", "opzioni": ["Solo se ci sono problemi", "Ogni settimana", "Ogni mattina prima di iniziare", "Quando lo chiede il responsabile"], "risposta_corretta": "Ogni mattina prima di iniziare"}]}], "Servizio Sala": [{"id": "d2", "titolo": "Gestione ordini al tavolo", "livello": "Intermedio", "percorso": "Servizio Sala", "scenario": "È sabato sera, il locale è pieno. Hai 4 tavoli da gestire.", "quiz": [{"domanda": "Un cliente chiede un piatto non più disponibile. Cosa fai?", "opzioni": ["Dico \"non ce l'abbiamo\" e vado via", "Mi scuso, spiego e propongo un'alternativa simile", "Dico al cliente di scegliere altro senza spiegare", "Invento una scusa"], "risposta_corretta": "Mi scuso, spiego e propongo un'alternativa simile"}, {"domanda": "Il cliente ha un'allergia alle noci. Come gestisci l'ordine?", "opzioni": ["Segno sulla comanda e avviso subito la cucina", "Ci penso dopo quando arriva l'ordine", "Evito solo le noci nel piatto", "Non è mio compito"], "risposta_corretta": "Segno sulla comanda e avviso subito la cucina"}, {"domanda": "Il conto non torna, mancano 10€. Cosa fai?", "opzioni": ["Chiudo il conto lo stesso", "Metto 10€ di tasca mia", "Riverifco e segnalo al responsabile", "Ignoro la differenza"], "risposta_corretta": "Riverifco e segnalo al responsabile"}, {"domanda": "Un cliente si lamenta che il piatto è freddo. Come rispondi?", "opzioni": ["Dico che è normale", "Mi scuso, ritiro il piatto e avviso la cucina", "Dico che l'ha mangiato quasi tutto", "Offro uno sconto senza dirlo al responsabile"], "risposta_corretta": "Mi scuso, ritiro il piatto e avviso la cucina"}, {"domanda": "Hai un ritardo di 20 minuti in cucina. Il cliente non lo sa. Cosa fai?", "opzioni": ["Aspetto che si lamenti", "Avviso il cliente subito con stima del tempo", "Porto del pane e non dico niente", "Dico che è colpa della cucina"], "risposta_corretta": "Avviso il cliente subito con stima del tempo"}]}], "Accoglienza e Prenotazioni": [{"id": "d3", "titolo": "Accoglienza clienti", "livello": "Base", "percorso": "Accoglienza e Prenotazioni", "scenario": "Un cliente entra nel ristorante senza prenotazione.", "quiz": [{"domanda": "Come accogli il cliente all'ingresso?", "opzioni": ["Lo ignoro finché non si siede", "Lo saluto, verifico disponibilità e lo accompagno", "Gli chiedo di aspettare fuori", "Lo mando al bancone"], "risposta_corretta": "Lo saluto, verifico disponibilità e lo accompagno"}, {"domanda": "Il locale è pieno. Come gestisci il cliente senza prenotazione?", "opzioni": ["Dico \"è pieno\" e chiudo la conversazione", "Mi scuso, do una stima dell'attesa e chiedo se vuole aspettare", "Lo metto in lista senza dirgli niente", "Lo ignoro"], "risposta_corretta": "Mi scuso, do una stima dell'attesa e chiedo se vuole aspettare"}, {"domanda": "Una prenotazione cancella all'ultimo minuto. Cosa fai?", "opzioni": ["Non faccio niente", "Avviso subito la cucina e segno nel registro", "Aspetto che arrivi un altro cliente", "Segno solo nel registro"], "risposta_corretta": "Avviso subito la cucina e segno nel registro"}, {"domanda": "Un cliente telefona per prenotare e ha un'allergia. Cosa noti?", "opzioni": ["Solo nome e numero di persone", "Nome, numero persone e allergia da comunicare alla cucina", "Solo l'allergia", "Non prendo nota"], "risposta_corretta": "Nome, numero persone e allergia da comunicare alla cucina"}, {"domanda": "Un cliente arriva 30 minuti in ritardo sulla prenotazione. Cosa fai?", "opzioni": ["Do il suo tavolo a un altro", "Mantengo il tavolo se disponibile e lo accolgo normalmente", "Lo faccio aspettare come punizione", "Chiamo il responsabile senza far niente"], "risposta_corretta": "Mantengo il tavolo se disponibile e lo accolgo normalmente"}]}], "Gestione Reclami": [{"id": "d4", "titolo": "Gestione reclamo cliente", "livello": "Avanzato", "percorso": "Gestione Reclami", "scenario": "Un cliente urla che ha trovato un capello nel piatto davanti a tutti.", "quiz": [{"domanda": "Come reagisci immediatamente?", "opzioni": ["Dico che non è possibile", "Mi scuso sinceramente, ritiro il piatto e avviso il responsabile", "Offro uno sconto e vado via", "Accuso la cucina"], "risposta_corretta": "Mi scuso sinceramente, ritiro il piatto e avviso il responsabile"}, {"domanda": "Il cliente vuole i soldi indietro. Puoi decidere da solo?", "opzioni": ["Sì, offro subito il rimborso", "No, chiamo il responsabile che ha l'autorità di decidere", "Dico di no e vado via", "Ignoro la richiesta"], "risposta_corretta": "No, chiamo il responsabile che ha l'autorità di decidere"}, {"domanda": "Dopo aver risolto, cosa fai?", "opzioni": ["Non faccio niente, è finita", "Segnalo l'episodio al responsabile per migliorare", "Racconto ai colleghi", "Dimentico"], "risposta_corretta": "Segnalo l'episodio al responsabile per migliorare"}, {"domanda": "Un cliente aggressivo alza la voce. Come mantieni la calma?", "opzioni": ["Alzo la voce anche io", "Resto calmo, parlo piano, lo porto in un'area privata", "Chiamo la sicurezza subito", "Abbandono il tavolo"], "risposta_corretta": "Resto calmo, parlo piano, lo porto in un'area privata"}, {"domanda": "Il reclamo è chiaramente esagerato. Cosa fai?", "opzioni": ["Lo dico al cliente", "Ascolto comunque con rispetto e gestisco professionalmente", "Chiamo il responsabile senza ascoltare", "Ignoro"], "risposta_corretta": "Ascolto comunque con rispetto e gestisco professionalmente"}]}], "Pulizia e Bagni": [{"id": "d5", "titolo": "Pulizia postazione e bagni", "livello": "Base", "percorso": "Pulizia e Bagni", "scenario": "Fine turno. Devi pulire la sala e i bagni prima di uscire.", "quiz": [{"domanda": "Con quale frequenza controlli i bagni durante il servizio?", "opzioni": ["Solo alla fine", "Ogni 30-45 minuti", "Solo se un cliente si lamenta", "Mai, non è mio compito"], "risposta_corretta": "Ogni 30-45 minuti"}, {"domanda": "Trovi il bagno senza carta igienica. Cosa fai?", "opzioni": ["Aspetto che finisca completamente", "Sostituisco subito e controllo le riserve", "Lo segno e aspetto domani", "Non è mio compito"], "risposta_corretta": "Sostituisco subito e controllo le riserve"}, {"domanda": "Qual è l'ordine corretto per pulire i tavoli?", "opzioni": ["Prima il pavimento poi i tavoli", "Prima rimuovo i rifiuti, poi santifico, poi asciugo", "Prima asciugo poi metto il detergente", "Non importa l'ordine"], "risposta_corretta": "Prima rimuovo i rifiuti, poi santifico, poi asciugo"}, {"domanda": "Hai finito il detergente igienizzante. Cosa fai?", "opzioni": ["Pulisco con solo acqua", "Segnalo al responsabile e utilizzo il prodotto sostitutivo approvato", "Uso qualsiasi detergente trovo", "Non pulisco finché non arriva"], "risposta_corretta": "Segnalo al responsabile e utilizzo il prodotto sostitutivo approvato"}, {"domanda": "Un collega non ha pulito la sua area. Cosa fai?", "opzioni": ["Non faccio niente, non è colpa mia", "Lo segnalo al responsabile con calma", "Pulisco io senza dire niente", "Litigo con il collega"], "risposta_corretta": "Lo segnalo al responsabile con calma"}]}]};
+ 
 var user=null,completati={};
-var curNode=null,curNodeProcs=[],curNodePerc=’’,curNodeImgSrc=’’,curNodeSz=72;
+var curNode=null,curNodeProcs=[],curNodePerc='',curNodeImgSrc='',curNodeSz=72;
 var curProc=null,curQuiz=[],curQ=0,curScore=0,answered=false;
-
+ 
 window.onload=function(){
-var raw=sessionStorage.getItem(‘sq_user’);
-if(!raw){window.location.href=‘index.html’;return;}
-user=JSON.parse(raw);
-document.getElementById(‘hud-name’).textContent=user.nome;
-document.getElementById(‘hud-role’).textContent=(user.ruolo||’’).toUpperCase()+’ · ‘+(user.classe||’’).toUpperCase();
-document.getElementById(‘hud-xp’).textContent=’XP: ’+(user.xp||0);
-var pr=sessionStorage.getItem(‘sq_progressi’);
-if(pr) completati=JSON.parse(pr);
-renderMap();
+  var raw=sessionStorage.getItem('sq_user');
+  if(!raw){window.location.href='index.html';return;}
+  user=JSON.parse(raw);
+  document.getElementById('hud-name').textContent=user.nome;
+  document.getElementById('hud-role').textContent=(user.ruolo||'').toUpperCase()+' · '+(user.classe||'').toUpperCase();
+  document.getElementById('hud-xp').textContent='XP: '+(user.xp||0);
+  var pr=sessionStorage.getItem('sq_progressi');
+  if(pr) completati=JSON.parse(pr);
+  renderMap();
 };
-
+ 
 function renderMap(){
-var wrap=document.getElementById(‘map-wrap’);
-var W=wrap.offsetWidth, H=wrap.offsetHeight;
-var svg=document.getElementById(‘map-svg’);
-var nd=document.getElementById(‘map-nodes’);
-nd.innerHTML=’’; svg.innerHTML=’’;
-
-var ruolo=user.ruolo||‘Cameriere’;
-if(ruolo===‘Sala’) ruolo=‘Cameriere’;
-if(ruolo===‘Cucina’) ruolo=‘Cuoco’;
-var nodes=MAP_NODES[ruolo]||MAP_NODES[‘Cameriere’];
-var pm=PERC_MAP[ruolo]||PERC_MAP[‘Cameriere’];
-
-var pos={};
-nodes.forEach(function(n){pos[n.id]={x:W*n.x/100,y:H*n.y/100};});
-
-// Corridoi SVG
-var sc=’’;
-nodes.forEach(function(n){
-n.connections.forEach(function(cid){
-var p1=pos[n.id],p2=pos[cid];
-if(!p2)return;
-sc+=’<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#080f20" stroke-width="32" stroke-linecap="round"/>’;
-sc+=’<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#141e3a" stroke-width="26" stroke-linecap="round"/>’;
-sc+=’<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#808aa3" stroke-width="16" stroke-linecap="round" opacity="0.28"/>’;
-sc+=’<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#c0c8e0" stroke-width="4" stroke-linecap="round" opacity="0.07"/>’;
-});
-});
-svg.innerHTML=sc;
-
-var total=0,done=0;
-nodes.forEach(function(n){
-var p=pos[n.id];
-var imgSrc=document.getElementById(SIZES[n.size]||‘img-medium’).src;
-var nodePerc=Object.keys(pm).find(function(k){return pm[k]===n.id;})||’’;
-var nProcs=DEMO[nodePerc]||[];
-var nDone=nProcs.length>0&&nProcs.every(function(pr){return completati[pr.id];});
-var hasP=nProcs.length>0;
-if(hasP){total++;}
-if(nDone){done++;}
-var sz=n.size===‘large’?92:n.size===‘medium’?68:52;
-var div=document.createElement(‘div’);
-div.className=‘map-node’+(nDone?’ done’:(hasP?’ active’:’’));
-div.style.left=p.x+‘px’; div.style.top=p.y+‘px’;
-var img=document.createElement(‘img’);
-img.className=‘room-img’; img.src=imgSrc;
-img.style.width=sz+‘px’; img.style.height=sz+‘px’;
-var chk=document.createElement(‘div’);
-chk.className=‘node-check’; chk.innerHTML=’✓’;
-var lbl=document.createElement(‘div’);
-lbl.className=‘node-label’;
-lbl.style.maxWidth=(sz+20)+‘px’;
-lbl.textContent=n.label;
-if(n.size===‘large’&&!nDone&&hasP){
-var t=document.createElement(‘span’);
-t.style.cssText=‘position:absolute;font-size:11px;top:-3px;right:-3px;’;
-t.innerHTML=’🔥’;
-div.appendChild(t);
+  var wrap=document.getElementById('map-wrap');
+  var W=wrap.offsetWidth, H=wrap.offsetHeight;
+  var svg=document.getElementById('map-svg');
+  var nd=document.getElementById('map-nodes');
+  nd.innerHTML=''; svg.innerHTML='';
+ 
+  var ruolo=user.ruolo||'Cameriere';
+  if(ruolo==='Sala') ruolo='Cameriere';
+  if(ruolo==='Cucina') ruolo='Cuoco';
+  var nodes=MAP_NODES[ruolo]||MAP_NODES['Cameriere'];
+  var pm=PERC_MAP[ruolo]||PERC_MAP['Cameriere'];
+ 
+  var pos={};
+  nodes.forEach(function(n){pos[n.id]={x:W*n.x/100,y:H*n.y/100};});
+ 
+  // Corridoi SVG
+  var sc='';
+  nodes.forEach(function(n){
+    n.connections.forEach(function(cid){
+      var p1=pos[n.id],p2=pos[cid];
+      if(!p2)return;
+      sc+='<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#080f20" stroke-width="32" stroke-linecap="round"/>';
+      sc+='<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#141e3a" stroke-width="26" stroke-linecap="round"/>';
+      sc+='<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#808aa3" stroke-width="16" stroke-linecap="round" opacity="0.28"/>';
+      sc+='<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="#c0c8e0" stroke-width="4" stroke-linecap="round" opacity="0.07"/>';
+    });
+  });
+  svg.innerHTML=sc;
+ 
+  var total=0,done=0;
+  nodes.forEach(function(n){
+    var p=pos[n.id];
+    var imgSrc=document.getElementById(SIZES[n.size]||'img-medium').src;
+    var nodePerc=Object.keys(pm).find(function(k){return pm[k]===n.id;})||'';
+    var nProcs=DEMO[nodePerc]||[];
+    var nDone=nProcs.length>0&&nProcs.every(function(pr){return completati[pr.id];});
+    var hasP=nProcs.length>0;
+    if(hasP){total++;}
+    if(nDone){done++;}
+    var sz=n.size==='large'?92:n.size==='medium'?68:52;
+    var div=document.createElement('div');
+    div.className='map-node'+(nDone?' done':(hasP?' active':''));
+    div.style.left=p.x+'px'; div.style.top=p.y+'px';
+    var img=document.createElement('img');
+    img.className='room-img'; img.src=imgSrc;
+    img.style.width=sz+'px'; img.style.height=sz+'px';
+    var chk=document.createElement('div');
+    chk.className='node-check'; chk.innerHTML='&#10003;';
+    var lbl=document.createElement('div');
+    lbl.className='node-label';
+    lbl.style.maxWidth=(sz+20)+'px';
+    lbl.textContent=n.label;
+    if(n.size==='large'&&!nDone&&hasP){
+      var t=document.createElement('span');
+      t.style.cssText='position:absolute;font-size:11px;top:-3px;right:-3px;';
+      t.innerHTML='&#128293;';
+      div.appendChild(t);
+    }
+    div.appendChild(img); div.appendChild(chk); div.appendChild(lbl);
+    if(hasP){
+      div.onclick=(function(node2,procs2,perc2,isrc,sz2){
+        return function(){openNode(node2,procs2,perc2,isrc,sz2);};
+      })(n,nProcs,nodePerc,imgSrc,sz);
+    }
+    nd.appendChild(div);
+  });
+  document.getElementById('bar-count').textContent=done+'/'+total+' completate';
 }
-div.appendChild(img); div.appendChild(chk); div.appendChild(lbl);
-if(hasP){
-div.onclick=(function(node2,procs2,perc2,isrc,sz2){
-return function(){openNode(node2,procs2,perc2,isrc,sz2);};
-})(n,nProcs,nodePerc,imgSrc,sz);
-}
-nd.appendChild(div);
-});
-document.getElementById(‘bar-count’).textContent=done+’/’+total+’ completate’;
-}
-
+ 
 function openNode(node,procs,perc,imgSrc,sz){
-curNode=node; curNodeProcs=procs; curNodePerc=perc; curNodeImgSrc=imgSrc; curNodeSz=sz;
-document.getElementById(‘nt’).textContent=perc;
-var ni=document.getElementById(‘n-img’);
-ni.src=imgSrc; ni.style.width=sz+‘px’; ni.style.height=sz+‘px’;
-document.getElementById(‘n-t’).textContent=perc;
-document.getElementById(‘n-s’).textContent=procs.length+’ procedura’+(procs.length>1?‘e’:’’) +’ disponibil’+(procs.length>1?‘i’:‘e’);
-var pd=document.getElementById(‘n-procs’); pd.innerHTML=’’;
-procs.forEach(function(proc){
-var lv=proc.livello||‘Base’,isDone=completati[proc.id]?true:false;
-var row=document.createElement(‘div’);
-row.className=‘proc-row’+(isDone?’ done’:’’);
-var lc=isDone?‘lok’:lv===‘Base’?‘lb’:lv===‘Intermedio’?‘li’:‘la’;
-row.innerHTML=’<div class="pr-info"><div class="pr-title">’+proc.titolo+’</div><div class="pr-sub">’+lv+(isDone?’ · Completato’:’’)+’</div></div><span class="pr-badge '+lc+'">’+(isDone?’✓’:lv)+’</span>’;
-row.onclick=(function(pr){return function(){startQuiz(pr);};}) (proc);
-pd.appendChild(row);
-});
-document.getElementById(‘node-ov’).classList.add(‘show’);
+  curNode=node; curNodeProcs=procs; curNodePerc=perc; curNodeImgSrc=imgSrc; curNodeSz=sz;
+  document.getElementById('nt').textContent=perc;
+  var ni=document.getElementById('n-img');
+  ni.src=imgSrc; ni.style.width=sz+'px'; ni.style.height=sz+'px';
+  document.getElementById('n-t').textContent=perc;
+  document.getElementById('n-s').textContent=procs.length+' procedura'+(procs.length>1?'e':'') +' disponibil'+(procs.length>1?'i':'e');
+  var pd=document.getElementById('n-procs'); pd.innerHTML='';
+  procs.forEach(function(proc){
+    var lv=proc.livello||'Base',isDone=completati[proc.id]?true:false;
+    var row=document.createElement('div');
+    row.className='proc-row'+(isDone?' done':'');
+    var lc=isDone?'lok':lv==='Base'?'lb':lv==='Intermedio'?'li':'la';
+    row.innerHTML='<div class="pr-info"><div class="pr-title">'+proc.titolo+'</div><div class="pr-sub">'+lv+(isDone?' · Completato':'')+'</div></div><span class="pr-badge '+lc+'">'+(isDone?'&#10003;':lv)+'</span>';
+    row.onclick=(function(pr){return function(){startQuiz(pr);};}) (proc);
+    pd.appendChild(row);
+  });
+  document.getElementById('node-ov').classList.add('show');
 }
-
-function closeNode(){document.getElementById(‘node-ov’).classList.remove(‘show’);}
-
+ 
+function closeNode(){document.getElementById('node-ov').classList.remove('show');}
+ 
 function startQuiz(proc){
-curProc=proc; curQuiz=proc.quiz; curQ=0; curScore=0; answered=false;
-document.getElementById(‘qt’).textContent=proc.titolo;
-document.getElementById(‘node-ov’).classList.remove(‘show’);
-document.getElementById(‘quiz-sc’).classList.add(‘show’);
-showQ();
+  curProc=proc; curQuiz=proc.quiz; curQ=0; curScore=0; answered=false;
+  document.getElementById('qt').textContent=proc.titolo;
+  document.getElementById('node-ov').classList.remove('show');
+  document.getElementById('quiz-sc').classList.add('show');
+  showQ();
 }
-
+ 
 function showQ(){
-answered=false;
-var q=curQuiz[curQ];
-document.getElementById(‘qprog’).textContent=(curQ+1)+’/’+curQuiz.length;
-document.getElementById(‘q-dom’).textContent=q.domanda;
-document.getElementById(‘q-fb’).classList.remove(‘show’);
-document.getElementById(‘btn-next’).classList.remove(‘show’);
-var scEl=document.getElementById(‘q-sc’);
-scEl.textContent=curProc.scenario||’’;
-scEl.style.display=curProc.scenario?‘block’:‘none’;
-var od=document.getElementById(‘q-ops’); od.innerHTML=’’;
-q.opzioni.forEach(function(op){
-var btn=document.createElement(‘button’);
-btn.className=‘qop’; btn.type=‘button’; btn.textContent=op;
-btn.onclick=function(){if(!answered)checkQ(op,q.risposta_corretta);};
-od.appendChild(btn);
-});
-document.getElementById(‘qbody’).scrollTop=0;
+  answered=false;
+  var q=curQuiz[curQ];
+  document.getElementById('qprog').textContent=(curQ+1)+'/'+curQuiz.length;
+  document.getElementById('q-dom').textContent=q.domanda;
+  document.getElementById('q-fb').classList.remove('show');
+  document.getElementById('btn-next').classList.remove('show');
+  var scEl=document.getElementById('q-sc');
+  scEl.textContent=curProc.scenario||'';
+  scEl.style.display=curProc.scenario?'block':'none';
+  var od=document.getElementById('q-ops'); od.innerHTML='';
+  q.opzioni.forEach(function(op){
+    var btn=document.createElement('button');
+    btn.className='qop'; btn.type='button'; btn.textContent=op;
+    btn.onclick=function(){if(!answered)checkQ(op,q.risposta_corretta);};
+    od.appendChild(btn);
+  });
+  document.getElementById('qbody').scrollTop=0;
 }
-
+ 
 function checkQ(chosen,correct){
-if(answered)return; answered=true;
-var isOk=chosen.trim()===correct.trim();
-if(isOk)curScore++;
-document.querySelectorAll(’.qop’).forEach(function(btn){
-btn.disabled=true;
-if(btn.textContent.trim()===correct.trim()) btn.classList.add(isOk?‘correct’:‘reveal’);
-else if(btn.textContent.trim()===chosen.trim()&&!isOk) btn.classList.add(‘wrong’);
-});
-var fbt=document.getElementById(‘q-fbt’);
-fbt.innerHTML=isOk?’✓ Corretto!’:’✗ Sbagliato’;
-fbt.className=isOk?‘ok’:‘ko’;
-document.getElementById(‘q-fbb’).textContent=’Risposta corretta: ’+correct;
-document.getElementById(‘q-fb’).classList.add(‘show’);
-var bn=document.getElementById(‘btn-next’);
-bn.innerHTML=curQ<curQuiz.length-1?‘Prossima ▶’:‘Vedi risultato 🏆’;
-bn.classList.add(‘show’);
+  if(answered)return; answered=true;
+  var isOk=chosen.trim()===correct.trim();
+  if(isOk)curScore++;
+  document.querySelectorAll('.qop').forEach(function(btn){
+    btn.disabled=true;
+    if(btn.textContent.trim()===correct.trim()) btn.classList.add(isOk?'correct':'reveal');
+    else if(btn.textContent.trim()===chosen.trim()&&!isOk) btn.classList.add('wrong');
+  });
+  var fbt=document.getElementById('q-fbt');
+  fbt.innerHTML=isOk?'&#10003; Corretto!':'&#10007; Sbagliato';
+  fbt.className=isOk?'ok':'ko';
+  document.getElementById('q-fbb').textContent='Risposta corretta: '+correct;
+  document.getElementById('q-fb').classList.add('show');
+  var bn=document.getElementById('btn-next');
+  bn.innerHTML=curQ<curQuiz.length-1?'Prossima &#9654;':'Vedi risultato &#127942;';
+  bn.classList.add('show');
 }
-
+ 
 function nextQ(){curQ++;if(curQ<curQuiz.length)showQ();else showResult();}
-
+ 
 function showResult(){
-var total=curQuiz.length,perc=Math.round((curScore/total)*100),xp=curScore*10,passed=perc>=70;
-user.xp=(user.xp||0)+xp;
-document.getElementById(‘hud-xp’).textContent=‘XP: ‘+user.xp;
-sessionStorage.setItem(‘sq_user’,JSON.stringify(user));
-if(passed){
-completati[curProc.id]={score:perc,xp:xp};
-sessionStorage.setItem(‘sq_progressi’,JSON.stringify(completati));
-saveXP();
+  var total=curQuiz.length,perc=Math.round((curScore/total)*100),xp=curScore*10,passed=perc>=70;
+  user.xp=(user.xp||0)+xp;
+  document.getElementById('hud-xp').textContent='XP: '+user.xp;
+  sessionStorage.setItem('sq_user',JSON.stringify(user));
+  if(passed){
+    completati[curProc.id]={score:perc,xp:xp};
+    sessionStorage.setItem('sq_progressi',JSON.stringify(completati));
+    saveXP();
+  }
+  document.getElementById('quiz-sc').classList.remove('show');
+  var icon=perc===100?'&#127942;':perc>=70?'&#11088;':'&#128517;';
+  document.getElementById('res-icon').innerHTML=icon;
+  document.getElementById('res-title').textContent=perc>=70?'Superato!':'Riprova!';
+  document.getElementById('res-xp').textContent=curScore+'/'+total+' corrette · +'+xp+' XP';
+  document.getElementById('res-msg').textContent=perc>=70
+    ?'Hai risposto correttamente al '+perc+'%. Torna al dungeon per la prossima stanza!'
+    :'Ti serve il 70% per superare. Ce la puoi fare!';
+  document.getElementById('res-sc').classList.add('show');
 }
-document.getElementById(‘quiz-sc’).classList.remove(‘show’);
-var icon=perc===100?’🏆’:perc>=70?’⭐’:’😅’;
-document.getElementById(‘res-icon’).innerHTML=icon;
-document.getElementById(‘res-title’).textContent=perc>=70?‘Superato!’:‘Riprova!’;
-document.getElementById(‘res-xp’).textContent=curScore+’/’+total+’ corrette · +’+xp+’ XP’;
-document.getElementById(‘res-msg’).textContent=perc>=70
-?‘Hai risposto correttamente al ‘+perc+’%. Torna al dungeon per la prossima stanza!’
-:‘Ti serve il 70% per superare. Ce la puoi fare!’;
-document.getElementById(‘res-sc’).classList.add(‘show’);
-}
-
+ 
 async function saveXP(){
-try{
-await fetch(AT_URL_U+’/’+user.id,{method:‘PATCH’,headers:AT_H,
-body:JSON.stringify({fields:{‘XP Totale’:user.xp,‘Ultima Sessione’:new Date().toISOString().slice(0,10)}})
-});
-}catch(e){console.log(‘XP save:’,e);}
+  try{
+    await fetch(AT_URL_U+'/'+user.id,{method:'PATCH',headers:AT_H,
+      body:JSON.stringify({fields:{'XP Totale':user.xp,'Ultima Sessione':new Date().toISOString().slice(0,10)}})
+    });
+  }catch(e){console.log('XP save:',e);}
 }
-
+ 
 function closeQuiz(){
-document.getElementById(‘quiz-sc’).classList.remove(‘show’);
-openNode(curNode,curNodeProcs,curNodePerc,curNodeImgSrc,curNodeSz);
+  document.getElementById('quiz-sc').classList.remove('show');
+  openNode(curNode,curNodeProcs,curNodePerc,curNodeImgSrc,curNodeSz);
 }
-
+ 
 function backToMap(){
-document.getElementById(‘res-sc’).classList.remove(‘show’);
-document.getElementById(‘node-ov’).classList.remove(‘show’);
-renderMap();
+  document.getElementById('res-sc').classList.remove('show');
+  document.getElementById('node-ov').classList.remove('show');
+  renderMap();
 }
 </script>
-
 </body>
 </html>
