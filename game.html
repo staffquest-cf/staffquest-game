@@ -58,13 +58,13 @@ body{
   border-radius:10px;
   padding:6px 10px;
 }
-.hn{font-size:11px;font-weight:bold;color:#f5c842}
-.hx{font-size:9px;color:#7ad47a;margin-top:2px}
+.hn{font-size:12px;font-weight:bold;color:#f5c842}
+.hx{font-size:10px;color:#7ad47a;margin-top:2px}
 .xbar{
   background:#1a1a0a;
   border-radius:4px;
-  height:5px;
-  width:96px;
+  height:6px;
+  width:104px;
   margin-top:4px;
   overflow:hidden;
 }
@@ -75,7 +75,7 @@ body{
   transition:width .3s;
 }
 .hw{
-  font-size:9px;
+  font-size:10px;
   color:#9aabd8;
   text-align:right;
   line-height:1.5;
@@ -84,7 +84,7 @@ body{
 #toast{
   position:absolute;
   left:50%;
-  bottom:96px;
+  bottom:102px;
   transform:translateX(-50%);
   z-index:30;
   pointer-events:none;
@@ -94,8 +94,8 @@ body{
   color:#dde5f4;
   border:1px solid #2b3654;
   border-radius:18px;
-  padding:7px 14px;
-  font-size:11px;
+  padding:8px 15px;
+  font-size:12px;
   white-space:nowrap;
   max-width:90%;
   text-align:center;
@@ -115,10 +115,10 @@ body{
   padding:24px;
 }
 #result.show{display:flex}
-#res-icon{font-size:48px}
-#res-title{font-size:20px;font-weight:bold;color:#f5c842}
-#res-xp{font-size:13px;color:#2ecc71}
-#res-msg{font-size:11px;color:#94a3c9;line-height:1.6;max-width:300px}
+#res-icon{font-size:52px}
+#res-title{font-size:22px;font-weight:bold;color:#f5c842}
+#res-xp{font-size:15px;color:#2ecc71}
+#res-msg{font-size:12px;color:#94a3c9;line-height:1.6;max-width:320px}
 #btn-res{
   margin-top:6px;
   padding:12px 24px;
@@ -126,7 +126,7 @@ body{
   background:rgba(245,200,66,.12);
   color:#f5c842;
   border:1px solid rgba(245,200,66,.35);
-  font-size:13px;
+  font-size:14px;
   font-weight:bold;
   font-family:monospace;
   cursor:pointer;
@@ -134,8 +134,8 @@ body{
 
 #ctl{
   position:absolute;
-  left:0;right:0;bottom:8px;
-  padding:0 12px;
+  left:0;right:0;bottom:10px;
+  padding:0 14px;
   display:flex;
   justify-content:space-between;
   align-items:flex-end;
@@ -143,8 +143,8 @@ body{
   pointer-events:none;
 }
 #joy{
-  width:110px;
-  height:110px;
+  width:120px;
+  height:120px;
   position:relative;
   pointer-events:auto;
   touch-action:none;
@@ -158,8 +158,8 @@ body{
 }
 #jk{
   position:absolute;
-  width:38px;
-  height:38px;
+  width:42px;
+  height:42px;
   border-radius:50%;
   background:rgba(255,255,255,.16);
   border:1.5px solid rgba(255,255,255,.28);
@@ -169,8 +169,8 @@ body{
 }
 
 #bok{
-  width:58px;
-  height:58px;
+  width:64px;
+  height:64px;
   border-radius:50%;
   background:rgba(245,200,66,.1);
   border:2px solid #f5c842;
@@ -181,8 +181,8 @@ body{
   justify-content:center;
   touch-action:none;
 }
-#bok .ol{font-size:10px;font-weight:bold;color:#f5c842}
-#bok .oh{font-size:7px;color:#6677aa;margin-top:1px;max-width:48px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#bok .ol{font-size:11px;font-weight:bold;color:#f5c842}
+#bok .oh{font-size:8px;color:#6677aa;margin-top:1px;max-width:54px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -195,7 +195,7 @@ body{
         <div class="xbar"><div class="xfill" id="xf" style="width:0%"></div></div>
       </div>
       <div class="hb">
-        <div class="hw" id="hw">Percorso lineare</div>
+        <div class="hw">Percorso lineare</div>
       </div>
     </div>
 
@@ -224,19 +224,18 @@ body{
 
 <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
 <script>
-const TW = 16;
+const TW = 24;
 const GW = 15;
 const GH = 24;
-const GAME_W = GW * TW;
-const GAME_H = GH * TW;
+const GAME_W = GW * TW;   // 360
+const GAME_H = GH * TW;   // 576
 const MAX_XP_BAR = 500;
 
 const STORAGE_KEYS = {
   user: 'sq_user',
-  progress: 'sq_progressi_base_v2'
+  progress: 'sq_progressi_base_v3'
 };
 
-// 0 = muro, 1 = percorso
 const PATH_MAP = [
   [0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
   [0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
@@ -298,6 +297,7 @@ function safeParse(raw, fallback) {
 function loadStoredUser() {
   const stored = safeParse(localStorage.getItem(STORAGE_KEYS.user), null) ||
                  safeParse(sessionStorage.getItem(STORAGE_KEYS.user), null);
+
   let nome = stored?.nome || 'Eroe';
   let ruolo = stored?.ruolo || 'Cameriere';
   let xp = Number(stored?.xp || 0);
@@ -353,7 +353,6 @@ function updateHUD() {
   qs('hx').textContent = `XP ${state.user.xp}`;
   qs('xf').style.width = Math.min((state.user.xp / MAX_XP_BAR) * 100, 100) + '%';
 }
-
 function toast(msg, dur=2200) {
   const el = qs('toast');
   el.textContent = msg;
@@ -361,13 +360,12 @@ function toast(msg, dur=2200) {
   clearTimeout(window.__toastTimer);
   window.__toastTimer = setTimeout(() => el.style.opacity = '0', dur);
 }
-
 function openResult(nodeLabel, xpGain) {
   state.ui.resultOpen = true;
   qs('res-icon').textContent = '⭐';
   qs('res-title').textContent = `${nodeLabel} completata`;
   qs('res-xp').textContent = `+${xpGain} XP`;
-  qs('res-msg').textContent = 'Base stabile. Il quiz reale verrà collegato a questa porta.';
+  qs('res-msg').textContent = 'Base stabile per smartphone. Qui collegherai il quiz reale.';
   qs('result').classList.add('show');
 }
 function closeResult() {
@@ -385,9 +383,9 @@ class BaseScene extends Phaser.Scene {
     this.near = null;
     this.jActive = false;
     this.jDir = null;
-    this.isMoving = false;
     this.gridC = 7;
     this.gridR = 3;
+    this.isMoving = false;
     this.animTimer = 0;
     this.walkFrame = 0;
     this.idleFrame = 0;
@@ -399,7 +397,7 @@ class BaseScene extends Phaser.Scene {
     const prog = this.add.graphics();
     const bg = this.add.rectangle(GAME_W/2, GAME_H/2, GAME_W, GAME_H, 0x08101d);
     const txt = this.add.text(GAME_W/2, GAME_H/2 - 16, 'Carico base StaffQuest...', {
-      fontSize:'9px',
+      fontSize:'12px',
       color:'#f5c842',
       fontFamily:'monospace'
     }).setOrigin(0.5);
@@ -407,9 +405,9 @@ class BaseScene extends Phaser.Scene {
     const drawProgress = (v) => {
       prog.clear();
       prog.fillStyle(0x1a1a2e);
-      prog.fillRect(GAME_W/2 - 80, GAME_H/2 + 8, 160, 12);
+      prog.fillRect(GAME_W/2 - 100, GAME_H/2 + 12, 200, 14);
       prog.fillStyle(0xf5c842);
-      prog.fillRect(GAME_W/2 - 80, GAME_H/2 + 8, 160 * v, 12);
+      prog.fillRect(GAME_W/2 - 100, GAME_H/2 + 12, 200 * v, 14);
     };
 
     this.load.on('progress', drawProgress);
@@ -443,12 +441,11 @@ class BaseScene extends Phaser.Scene {
 
     this.cameras.main.setRoundPixels(true);
     this.cameras.main.startFollow(this.pp, true, 1, 1);
-    this.cameras.main.setZoom(2);
-    this.cameras.main.setBounds(0, 0, GAME_W, GAME_H);
+    this.cameras.main.setZoom(1);
 
     updateHUD();
     this.refreshNodes();
-    toast('Joystick a 4 direzioni. Movimento a caselle, stabile su smartphone.');
+    toast('Movimento a caselle. 4 direzioni nette.');
   }
 
   buildMap() {
@@ -464,16 +461,18 @@ class BaseScene extends Phaser.Scene {
 
         if (PATH_MAP[r][c] === 1) {
           g.fillStyle(0x243553);
-          g.fillRect(x, y, TW, TW);
+          g.fillRoundedRect(x + 1, y + 1, TW - 2, TW - 2, 4);
+
           g.fillStyle(0x36507d);
-          g.fillRect(x, y, TW, 2);
+          g.fillRect(x + 2, y + 2, TW - 4, 3);
+
           g.fillStyle(0x1a2741);
-          g.fillRect(x, y + TW - 2, TW, 2);
+          g.fillRect(x + 2, y + TW - 5, TW - 4, 3);
         } else {
           g.fillStyle(0x0b1322);
           g.fillRect(x, y, TW, TW);
 
-          g.lineStyle(1, 0x12203a, 0.7);
+          g.lineStyle(1, 0x12203a, 0.6);
           g.strokeRect(x, y, TW, TW);
         }
       }
@@ -492,8 +491,8 @@ class BaseScene extends Phaser.Scene {
         if (PATH_MAP[r][c] !== 1) continue;
         const x = c * TW;
         const y = r * TW;
-        this.pathBase.fillStyle(0x6f93cf, 0.10);
-        this.pathBase.fillRect(x + 3, y + 3, TW - 6, TW - 6);
+        this.pathBase.fillStyle(0x6f93cf, 0.08);
+        this.pathBase.fillRoundedRect(x + 5, y + 5, TW - 10, TW - 10, 4);
       }
     }
 
@@ -508,7 +507,7 @@ class BaseScene extends Phaser.Scene {
       const x = c * TW;
       const y = r * TW;
       this.pathCurrent.fillStyle(0xf5c842, pulse);
-      this.pathCurrent.fillRect(x + 4, y + 4, TW - 8, TW - 8);
+      this.pathCurrent.fillRoundedRect(x + 6, y + 6, TW - 12, TW - 12, 4);
     });
   }
 
@@ -559,20 +558,20 @@ class BaseScene extends Phaser.Scene {
     this.nodeViews = {};
 
     this.nodes.forEach(node => {
-      const x = node.x * TW + TW / 2;
-      const y = node.y * TW + TW / 2;
+      const x = this.tileToWorldX(node.x);
+      const y = this.tileToWorldY(node.y);
       const big = node.sz === 2;
-      const w = big ? 18 : 15;
-      const h = big ? 18 : 15;
+      const w = big ? 28 : 24;
+      const h = big ? 28 : 24;
 
       const glow = this.add.graphics().setDepth(2);
       const box = this.add.graphics().setDepth(3);
-      const label = this.add.text(x, y - (big ? 12 : 10), node.label, {
-        fontSize: '6px',
+      const label = this.add.text(x, y - (big ? 18 : 14), node.label, {
+        fontSize: '10px',
         color: '#cdd8f0',
         fontFamily: 'monospace',
-        backgroundColor: 'rgba(5,13,36,0.95)',
-        padding: { x: 2, y: 1 }
+        backgroundColor: 'rgba(5,13,36,0.96)',
+        padding: { x: 3, y: 2 }
       }).setOrigin(0.5, 1).setDepth(4);
 
       this.nodeViews[node.id] = { x, y, w, h, glow, box, label, big, node };
@@ -592,13 +591,13 @@ class BaseScene extends Phaser.Scene {
 
     if (done) {
       view.glow.fillStyle(0x2ecc71, 0.16);
-      view.glow.fillCircle(view.x, view.y, view.big ? 12 : 10);
+      view.glow.fillCircle(view.x, view.y, view.big ? 18 : 15);
     } else if (current) {
       view.glow.fillStyle(0xf5c842, 0.18 + Math.sin(this.pathGlowPulse) * 0.05);
-      view.glow.fillCircle(view.x, view.y, view.big ? 13 : 11);
+      view.glow.fillCircle(view.x, view.y, view.big ? 19 : 16);
     } else if (unlocked) {
       view.glow.fillStyle(0x8ca4d9, 0.08);
-      view.glow.fillCircle(view.x, view.y, view.big ? 11 : 9);
+      view.glow.fillCircle(view.x, view.y, view.big ? 16 : 14);
     }
 
     const alpha = done || current || unlocked ? 1 : 0.5;
@@ -606,19 +605,19 @@ class BaseScene extends Phaser.Scene {
     const fill = done ? 0x224a31 : current ? 0x7a4a1d : unlocked ? 0x2c3852 : 0x242836;
 
     view.box.fillStyle(0x0a0f18, 0.25 * alpha);
-    view.box.fillRoundedRect(view.x - view.w/2 + 1, view.y - view.h/2 + 2, view.w, view.h, 3);
+    view.box.fillRoundedRect(view.x - view.w/2 + 1, view.y - view.h/2 + 2, view.w, view.h, 5);
 
     view.box.fillStyle(0x192132, alpha);
-    view.box.fillRoundedRect(view.x - view.w/2 - 2, view.y - view.h/2 - 2, view.w + 4, view.h + 4, 3);
+    view.box.fillRoundedRect(view.x - view.w/2 - 2, view.y - view.h/2 - 2, view.w + 4, view.h + 4, 5);
 
     view.box.fillStyle(fill, alpha);
-    view.box.fillRoundedRect(view.x - view.w/2, view.y - view.h/2, view.w, view.h, 3);
+    view.box.fillRoundedRect(view.x - view.w/2, view.y - view.h/2, view.w, view.h, 5);
 
-    view.box.lineStyle(1, border, alpha);
-    view.box.strokeRoundedRect(view.x - view.w/2, view.y - view.h/2, view.w, view.h, 3);
+    view.box.lineStyle(2, border, alpha);
+    view.box.strokeRoundedRect(view.x - view.w/2, view.y - view.h/2, view.w, view.h, 5);
 
     view.box.fillStyle(border, alpha);
-    view.box.fillCircle(view.x, view.y, 2);
+    view.box.fillCircle(view.x, view.y, 4);
 
     view.label.setColor(done ? '#2ecc71' : current ? '#f5c842' : unlocked ? '#cdd8f0' : '#6c7796');
   }
@@ -632,15 +631,15 @@ class BaseScene extends Phaser.Scene {
     const y = this.tileToWorldY(this.gridR);
 
     this.pp = this.add.sprite(x, y, 'idle_0')
-      .setDisplaySize(18, 22)
+      .setDisplaySize(26, 32)
       .setDepth(10);
 
     this.ptag = this.add.text(x, y, state.user.nome, {
-      fontSize: '6px',
+      fontSize: '10px',
       color: '#f5c842',
       fontFamily: 'monospace',
       backgroundColor: '#000000b0',
-      padding: { x: 2, y: 1 }
+      padding: { x: 3, y: 2 }
     }).setOrigin(0.5, 1).setDepth(11);
   }
 
@@ -659,272 +658,4 @@ class BaseScene extends Phaser.Scene {
   setupJoystick4Dir() {
     const joy = qs('joy');
     const knob = qs('jk');
-    if (!joy || !knob) return;
-
-    const R = 34;
-
-    const getPoint = (e) => {
-      const t = e.touches ? e.touches[0] : e;
-      const rect = joy.getBoundingClientRect();
-      return {
-        x: t.clientX - rect.left - rect.width / 2,
-        y: t.clientY - rect.top - rect.height / 2
-      };
-    };
-
-    const setDir = (x, y) => {
-      const ax = Math.abs(x);
-      const ay = Math.abs(y);
-
-      if (Math.max(ax, ay) < 10) {
-        this.jDir = null;
-        knob.style.transform = 'translate(-50%,-50%)';
-        return;
-      }
-
-      if (ax > ay) this.jDir = x > 0 ? 'right' : 'left';
-      else this.jDir = y > 0 ? 'down' : 'up';
-
-      let kx = 0, ky = 0;
-      if (this.jDir === 'left') kx = -R;
-      if (this.jDir === 'right') kx = R;
-      if (this.jDir === 'up') ky = -R;
-      if (this.jDir === 'down') ky = R;
-
-      knob.style.transform = `translate(calc(-50% + ${kx}px), calc(-50% + ${ky}px))`;
-    };
-
-    const onStart = (e) => {
-      if (state.ui.resultOpen) return;
-      e.preventDefault?.();
-      this.jActive = true;
-      const p = getPoint(e);
-      setDir(p.x, p.y);
-    };
-    const onMove = (e) => {
-      if (!this.jActive || state.ui.resultOpen) return;
-      e.preventDefault?.();
-      const p = getPoint(e);
-      setDir(p.x, p.y);
-    };
-    const onEnd = () => {
-      this.jActive = false;
-      this.jDir = null;
-      knob.style.transform = 'translate(-50%,-50%)';
-    };
-
-    joy.addEventListener('touchstart', onStart, { passive:false });
-    joy.addEventListener('touchmove', onMove, { passive:false });
-    joy.addEventListener('touchend', onEnd, { passive:false });
-    joy.addEventListener('mousedown', onStart);
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onEnd);
-
-    this._handlers.push(() => joy.removeEventListener('touchstart', onStart));
-    this._handlers.push(() => joy.removeEventListener('touchmove', onMove));
-    this._handlers.push(() => joy.removeEventListener('touchend', onEnd));
-    this._handlers.push(() => joy.removeEventListener('mousedown', onStart));
-    this._handlers.push(() => window.removeEventListener('mousemove', onMove));
-    this._handlers.push(() => window.removeEventListener('mouseup', onEnd));
-  }
-
-  setupOkButton() {
-    const btn = qs('bok');
-    if (!btn) return;
-
-    const onTouch = (e) => { e.preventDefault(); this.interact(); };
-    const onMouse = () => this.interact();
-
-    btn.addEventListener('touchstart', onTouch, { passive:false });
-    btn.addEventListener('mousedown', onMouse);
-
-    this._handlers.push(() => btn.removeEventListener('touchstart', onTouch));
-    this._handlers.push(() => btn.removeEventListener('mousedown', onMouse));
-  }
-
-  cleanupHandlers() {
-    while (this._handlers.length) {
-      const fn = this._handlers.pop();
-      try { fn(); } catch {}
-    }
-  }
-
-  isPath(c, r) {
-    return r >= 0 && r < GH && c >= 0 && c < GW && PATH_MAP[r][c] === 1;
-  }
-
-  tileToWorldX(c) { return c * TW + TW / 2; }
-  tileToWorldY(r) { return r * TW + TW / 2; }
-
-  tryMove(dir) {
-    if (this.isMoving) return;
-
-    let dc = 0, dr = 0;
-    if (dir === 'left') dc = -1;
-    if (dir === 'right') dc = 1;
-    if (dir === 'up') dr = -1;
-    if (dir === 'down') dr = 1;
-
-    const nc = this.gridC + dc;
-    const nr = this.gridR + dr;
-    if (!this.isPath(nc, nr)) return;
-
-    this.gridC = nc;
-    this.gridR = nr;
-    this.isMoving = true;
-
-    const tx = this.tileToWorldX(nc);
-    const ty = this.tileToWorldY(nr);
-
-    this.tweens.add({
-      targets: [this.pp, this.ptag],
-      x: tx,
-      y: (target) => target === this.ptag ? ty - 14 : ty,
-      duration: 120,
-      ease: 'Linear',
-      onComplete: () => {
-        this.isMoving = false;
-      }
-    });
-
-    if (dir === 'left') this.pp.setFlipX(true);
-    if (dir === 'right') this.pp.setFlipX(false);
-  }
-
-  interact() {
-    if (state.ui.resultOpen || !this.near) return;
-    if (!isUnlocked(this.near.id)) {
-      toast('Prima completa la porta precedente');
-      return;
-    }
-    if (isCompleted(this.near.id)) {
-      toast('Porta già completata');
-      return;
-    }
-
-    const xpGain = 15;
-    setCompleted(this.near.id, true);
-    state.user.xp += xpGain;
-    persistUser();
-    updateHUD();
-    openResult(this.near.label, xpGain);
-  }
-
-  updatePlayerAnimation(delta) {
-    this.animTimer += delta;
-
-    if (this.isMoving) {
-      if (this.animTimer > 90) {
-        this.animTimer = 0;
-        this.walkFrame = (this.walkFrame + 1) % 30;
-        const key = 'walk_' + this.walkFrame;
-        if (this.textures.exists(key)) this.pp.setTexture(key);
-      }
-    } else {
-      if (this.animTimer > 170) {
-        this.animTimer = 0;
-        this.idleFrame = (this.idleFrame + 1) % 8;
-        const key = 'idle_' + this.idleFrame;
-        if (this.textures.exists(key)) this.pp.setTexture(key);
-      }
-    }
-  }
-
-  updateNearNode() {
-    let near = null;
-    let nearest = Infinity;
-    const px = this.tileToWorldX(this.gridC);
-    const py = this.tileToWorldY(this.gridR);
-    const currentId = getCurrentNodeId();
-
-    this.nodes.forEach(node => {
-      const x = this.tileToWorldX(node.x);
-      const y = this.tileToWorldY(node.y);
-      const d = Phaser.Math.Distance.Between(px, py, x, y);
-      if (d < 18 && d < nearest) {
-        nearest = d;
-        near = node;
-      }
-    });
-
-    this.near = near;
-
-    const okBtn = qs('bok');
-    const okHint = qs('oh');
-
-    if (near) {
-      okBtn.style.opacity = '1';
-      okHint.textContent = near.id === currentId ? near.label : isCompleted(near.id) ? 'fatta' : 'bloccata';
-    } else {
-      okBtn.style.opacity = '0.35';
-      okHint.textContent = 'porta';
-    }
-  }
-
-  pollInput() {
-    if (this.isMoving || state.ui.resultOpen) return;
-
-    let dir = null;
-
-    if (this.curs.left.isDown || this.wk.lt.isDown) dir = 'left';
-    else if (this.curs.right.isDown || this.wk.rt.isDown) dir = 'right';
-    else if (this.curs.up.isDown || this.wk.up.isDown) dir = 'up';
-    else if (this.curs.down.isDown || this.wk.dn.isDown) dir = 'down';
-    else if (this.jDir) dir = this.jDir;
-
-    if (dir) this.tryMove(dir);
-  }
-
-  update(time, delta) {
-    this.pathGlowPulse += delta * 0.01;
-    this.redrawPath();
-    this.refreshNodes();
-    this.pollInput();
-    this.updatePlayerAnimation(delta);
-    this.updateNearNode();
-
-    if (Phaser.Input.Keyboard.JustDown(this.spc) || Phaser.Input.Keyboard.JustDown(this.enter)) {
-      this.interact();
-    }
-  }
-}
-
-updateHUD();
-
-new Phaser.Game({
-  type: Phaser.CANVAS,
-  parent: 'ga',
-  backgroundColor: '#08101d',
-  pixelArt: true,
-  roundPixels: true,
-  antialias: false,
-  antialiasGL: false,
-  scene: [BaseScene],
-  scale: {
-    mode: Phaser.Scale.NONE,
-    width: GAME_W,
-    height: GAME_H
-  }
-});
-
-(function applyCanvasScale() {
-  const fit = () => {
-    const canvas = document.querySelector('#ga canvas');
-    const host = document.getElementById('ga');
-    if (!canvas || !host) return;
-
-    const rect = host.getBoundingClientRect();
-    const scale = Math.max(1, Math.floor(Math.min(rect.width / GAME_W, rect.height / GAME_H, 3)));
-    canvas.style.width = (GAME_W * scale) + 'px';
-    canvas.style.height = (GAME_H * scale) + 'px';
-    canvas.style.margin = '0 auto';
-  };
-
-  window.addEventListener('resize', fit);
-  window.addEventListener('orientationchange', fit);
-  setTimeout(fit, 50);
-  setTimeout(fit, 250);
-})();
-</script>
-</body>
-</html>
+    if (!joy || !knob)
