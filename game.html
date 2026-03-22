@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<title>StaffQuest</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:hidden;background:#07070f;font-family:monospace;}
+body{display:flex;flex-direction:column;align-items:center;}
+#root{position:relative;width:100%;max-width:390px;height:100%;display:flex;flex-direction:column;}
+#ga{position:relative;flex:1;min-height:0;overflow:hidden;background:#07070f;}
+#ga canvas{display:block!important;image-rendering:pixelated;image-rendering:crisp-edges;}
+#hud{position:absolute;top:0;left:0;right:0;padding:6px 10px;pointer-events:none;z-index:20;display:flex;justify-content:space-between;align-items:flex-start;gap:6px;}
+.hb{background:rgba(5,13,36,.94);border:1px solid rgba(245,200,66,.3);border-radius:8px;padding:5px 9px;}
+.hn{font-size:10px;font-weight:bold;color:#f5c842;}
+.hx{font-size:8px;color:#5a9a5a;margin-top:2px;}
+.xbar{background:#1a1a0a;border-radius:3px;height:4px;width:76px;margin-top:3px;overflow:hidden;}
+.xfill{height:100%;background:#f5c842;border-radius:3px;transition:width .4s;}
+.hw{font-size:8px;color:#8888aa;text-align:right;line-height:1.7;}
+#toast{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.92);color:#ccc;font-size:9px;padding:5px 14px;border-radius:20px;border:1px solid #2a2a3a;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap;z-index:15;max-width:90%;text-align:center;}
+/* Sage dialog */
+#sage-ov{position:absolute;inset:0;z-index:40;display:none;flex-direction:column;justify-content:flex-end;}
+#sage-ov.show{display:flex;}
+#sage-bg{position:absolute;inset:0;background:rgba(0,0,0,.55);}
+#sage-box{position:relative;background:#07070f;border-top:3px solid #f5c842;}
+#sage-hdr{display:flex;align-items:center;gap:10px;padding:10px 14px 8px;border-bottom:1px solid rgba(245,200,66,.2);}
+#sage-face{width:48px;height:48px;border-radius:8px;border:2px solid rgba(245,200,66,.4);overflow:hidden;flex-shrink:0;background:#0d0d22;}
+#sage-face canvas{display:block;image-rendering:pixelated;}
+#sage-nametag{font-size:11px;font-weight:bold;color:#f5c842;}
+#sage-proc{font-size:9px;color:#6677bb;margin-top:2px;}
+#sage-body{padding:10px 14px;}
+#sage-sc{font-size:10px;color:#8899bb;line-height:1.5;margin-bottom:8px;font-style:italic;}
+#sage-q{font-size:12px;font-weight:bold;color:#f5c842;line-height:1.4;margin-bottom:10px;}
+#sage-ch{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;}
+.sage-btn{background:#0c0c24;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:9px 12px;font-size:10px;color:#aabbd0;text-align:left;cursor:pointer;font-family:monospace;line-height:1.4;touch-action:manipulation;display:block;width:100%;}
+.sage-btn:active{background:rgba(245,200,66,.1);border-color:#f5c842;color:#f5c842;}
+#sage-prog{font-size:9px;color:#445577;text-align:center;}
+/* Controls */
+#ctl{position:absolute;bottom:6px;left:0;right:0;display:flex;align-items:flex-end;justify-content:space-between;padding:0 10px;z-index:12;pointer-events:none;}
+#joy{width:88px;height:88px;pointer-events:auto;position:relative;touch-action:none;}
+#jb{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.12);}
+#jk{position:absolute;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.26);top:50%;left:50%;transform:translate(-50%,-50%);}
+#bok{width:54px;height:54px;border-radius:50%;background:rgba(245,200,66,.1);border:2px solid #f5c842;pointer-events:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;touch-action:none;}
+#bok .ol{font-size:9px;font-weight:bold;color:#f5c842;}
+#bok .oh{font-size:7px;color:#555577;margin-top:1px;text-align:center;max-width:48px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+/* Badge */
+#badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:rgba(4,4,18,.97);border:2px solid #f5c842;border-radius:14px;padding:18px 24px;z-index:50;text-align:center;transition:transform .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
+#badge.show{transform:translate(-50%,-50%) scale(1);}
+#badge .bi{font-size:36px;display:block;margin-bottom:6px;}
+#badge .bt{font-size:12px;font-weight:bold;color:#f5c842;}
+#badge .bs{font-size:9px;color:#aaa;margin-top:3px;}
+/* Result */
+#result{position:absolute;inset:0;z-index:45;background:rgba(4,4,18,.97);display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:28px;}
+#result.show{display:flex;}
+#res-icon{font-size:52px;}
+#res-title{font-size:20px;font-weight:bold;color:#f5c842;}
+#res-xp{font-size:13px;color:#2ecc71;}
+#res-msg{font-size:11px;color:#7788aa;line-height:1.6;max-width:270px;}
+#btn-res{margin-top:6px;padding:12px 26px;border-radius:10px;background:rgba(245,200,66,.12);color:#f5c842;border:1px solid rgba(245,200,66,.35);font-size:13px;font-weight:bold;font-family:monospace;letter-spacing:2px;cursor:pointer;touch-action:manipulation;}
+</style>
+</head>
+<body>
+<div id="root">
+  <div id="ga">
+    <div id="hud">
+      <div class="hb"><div class="hn" id="hn">...</div><div class="hx" id="hx">XP 0</div><div class="xbar"><div class="xfill" id="xf" style="width:0%"></div></div></div>
+      <div class="hb"><div class="hw" id="hw">Dungeon</div></div>
+    </div>
+    <div id="toast"></div>
+    <div id="badge"><span class="bi" id="bi"></span><div class="bt" id="bt"></div><div class="bs" id="bs"></div></div>
+    <div id="sage-ov">
+      <div id="sage-bg" onclick=""></div>
+      <div id="sage-box">
+        <div id="sage-hdr">
+          <div id="sage-face"><canvas id="sage-canvas" width="48" height="48"></canvas></div>
+          <div><div id="sage-nametag">Il Saggio</div><div id="sage-proc"></div></div>
+        </div>
+        <div id="sage-body">
+          <div id="sage-sc"></div>
+          <div id="sage-q"></div>
+          <div id="sage-ch"></div>
+          <div id="sage-prog"></div>
+        </div>
+      </div>
+    </div>
+    <div id="result">
+      <div id="res-icon"></div><div id="res-title"></div>
+      <div id="res-xp"></div><div id="res-msg"></div>
+      <button id="btn-res" type="button" onclick="closeResult()">Continua &#9654;</button>
+    </div>
+    <div id="ctl">
+      <div id="joy"><div id="jb"></div><div id="jk"></div></div>
+      <div id="bok"><div class="ol">OK</div><div class="oh" id="oh">esplora</div></div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+<script>
+const TW=16,GW=15,GH=24,SCALE=3;
+const CMAP=[[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2], [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]];
+const ALL_MAPS={"Cameriere": [{"id": "ap", "label": "Apertura\nChiusura", "x": 50, "y": 8, "sz": 2, "conn": ["sal"]}, {"id": "sal", "label": "Sala", "x": 50, "y": 22, "sz": 2, "conn": ["acc"]}, {"id": "acc", "label": "Accoglienza\nCassa", "x": 50, "y": 38, "sz": 2, "conn": ["ven"]}, {"id": "ven", "label": "Vendita", "x": 50, "y": 53, "sz": 1, "conn": ["pre", "rec"]}, {"id": "pre", "label": "Gestione\nPrenotazioni", "x": 28, "y": 70, "sz": 1, "conn": []}, {"id": "rec", "label": "Reclami", "x": 72, "y": 70, "sz": 1, "conn": []}], "Cuoco": [{"id": "ap", "label": "Apertura\nChiusura", "x": 50, "y": 7, "sz": 2, "conn": ["org"]}, {"id": "org", "label": "Organizzazione", "x": 50, "y": 20, "sz": 2, "conn": ["fun", "pre"]}, {"id": "fun", "label": "Funzionamento", "x": 28, "y": 34, "sz": 1, "conn": ["ord"]}, {"id": "pre", "label": "Preparazioni", "x": 72, "y": 34, "sz": 1, "conn": ["ord"]}, {"id": "ord", "label": "Ordini\nFornitori", "x": 50, "y": 50, "sz": 2, "conn": ["ser", "com"]}, {"id": "ser", "label": "Servizio", "x": 28, "y": 66, "sz": 1, "conn": ["ric"]}, {"id": "com", "label": "Gestione\nComande", "x": 72, "y": 66, "sz": 1, "conn": ["ric"]}, {"id": "ric", "label": "Reclami", "x": 50, "y": 82, "sz": 1, "conn": []}], "Barista": [{"id": "ap", "label": "Apertura\nChiusura", "x": 50, "y": 8, "sz": 2, "conn": ["mag"]}, {"id": "mag", "label": "Magazzino", "x": 50, "y": 23, "sz": 2, "conn": ["prep", "org"]}, {"id": "prep", "label": "Preparazioni", "x": 28, "y": 39, "sz": 1, "conn": ["ser"]}, {"id": "org", "label": "Organizzazione", "x": 72, "y": 39, "sz": 1, "conn": ["ser"]}, {"id": "ser", "label": "Servizio", "x": 50, "y": 56, "sz": 2, "conn": ["rec"]}, {"id": "rec", "label": "Reclami", "x": 50, "y": 73, "sz": 1, "conn": []}]};
+const ALL_QUESTS={"ap": {"titolo": "Apertura e Chiusura", "scenario": "Sono le 8:00. Sei il primo ad arrivare al locale.", "quiz": [{"d": "Senti odore di gas vicino ai fornelli. Cosa fai?", "o": ["Chiudo il gas, apro le finestre e chiamo il responsabile", "Accendo i fornelli per controllare", "Aspetto che passi", "Apro solo le finestre"], "r": "Chiudo il gas, apro le finestre e chiamo il responsabile", "fb": "Corretto! Gas off + ventilazione + comunicazione."}, {"d": "Il frigo segna 6 gradi. Cosa fai?", "o": ["Abbasso il termostato e registro la temperatura", "Aspetto che scenda", "Svuoto il frigo", "Non faccio niente"], "r": "Abbasso il termostato e registro la temperatura", "fb": "Esatto! Registrare e fondamentale per HACCP."}, {"d": "Quando firmi il registro HACCP?", "o": ["Ogni mattina prima di iniziare", "Solo se ci sono problemi", "Ogni settimana", "Quando lo chiede il responsabile"], "r": "Ogni mattina prima di iniziare", "fb": "Perfetto! Il registro HACCP va firmato ogni mattina."}]}, "sal": {"titolo": "Servizio Sala", "scenario": "E sabato sera, il locale e pieno.", "quiz": [{"d": "Un cliente chiede un piatto non disponibile. Cosa fai?", "o": ["Mi scuso e propongo un alternativa", "Dico solo che non ce e vado via", "Invento una scusa", "Lo mando a scegliere da solo"], "r": "Mi scuso e propongo un alternativa", "fb": "Bene! Scuse + alternativa = cliente soddisfatto."}, {"d": "Il conto non torna, mancano 10 euro. Cosa fai?", "o": ["Riverifco e segnalo al responsabile", "Chiudo il conto lo stesso", "Metto 10 euro di tasca mia", "Ignoro la differenza"], "r": "Riverifco e segnalo al responsabile", "fb": "Corretto! Trasparenza sempre."}]}, "acc": {"titolo": "Accoglienza e Cassa", "scenario": "Un cliente entra senza prenotazione.", "quiz": [{"d": "Come accogli il cliente?", "o": ["Lo saluto, verifico disponibilita e lo accompagno", "Lo ignoro finche non si siede", "Lo mando al bancone", "Gli chiedo di tornare dopo"], "r": "Lo saluto, verifico disponibilita e lo accompagno", "fb": "Perfetto! Accoglienza professionale."}]}, "ven": {"titolo": "Vendita", "scenario": "Un cliente sembra indeciso sul dessert.", "quiz": [{"d": "Come fai upselling?", "o": ["Descrivo il dessert del giorno con entusiasmo", "Non dico niente", "Dico solo i prezzi", "Porto il menu e vado via"], "r": "Descrivo il dessert del giorno con entusiasmo", "fb": "Ottimo! La vendita attiva aumenta lo scontrino."}]}, "pre": {"titolo": "Gestione Prenotazioni", "scenario": "Un cliente chiama per prenotare.", "quiz": [{"d": "Il cliente ha una allergia. Cosa noti?", "o": ["Nome, persone e allergia da comunicare alla cucina", "Solo nome e numero persone", "Solo l allergia", "Non prendo note"], "r": "Nome, persone e allergia da comunicare alla cucina", "fb": "Corretto! Allergia sempre comunicata alla cucina."}]}, "rec": {"titolo": "Gestione Reclami", "scenario": "Un cliente si lamenta del piatto davanti a tutti.", "quiz": [{"d": "Come reagisci al reclamo?", "o": ["Mi scuso, ritiro il piatto e chiamo il responsabile", "Dico che non e possibile", "Offro uno sconto e vado via", "Ignoro il cliente"], "r": "Mi scuso, ritiro il piatto e chiamo il responsabile", "fb": "Esatto! Scuse + azione + responsabile."}]}, "org": {"titolo": "Organizzazione Cucina", "scenario": "Inizio turno in cucina.", "quiz": [{"d": "Come organizzi la postazione?", "o": ["Controllo scorte, pulisco e preparo gli strumenti", "Aspetto il sous chef", "Inizio a cucinare subito", "Chiedo al responsabile"], "r": "Controllo scorte, pulisco e preparo gli strumenti", "fb": "Perfetto! La mise en place inizia dall organizzazione."}]}, "fun": {"titolo": "Funzionamento Attrezzature", "scenario": "Un macchinario non funziona.", "quiz": [{"d": "Il friggitore fa un rumore strano. Cosa fai?", "o": ["Spengo, segnalo al responsabile e non lo uso", "Continuo con cautela", "Chiamo un tecnico da solo", "Ignoro il rumore"], "r": "Spengo, segnalo al responsabile e non lo uso", "fb": "Corretto! Sicurezza prima di tutto."}]}, "ord": {"titolo": "Ordini Fornitori", "scenario": "Arriva la merce dal fornitore.", "quiz": [{"d": "Come controlli la merce?", "o": ["Verifico quantita, qualita e temperature prima di firmare", "Firmo subito", "Metto tutto in magazzino e controllo dopo", "Chiedo al fornitore"], "r": "Verifico quantita, qualita e temperature prima di firmare", "fb": "Esatto! Il controllo al ricevimento e obbligatorio HACCP."}]}, "ser": {"titolo": "Servizio", "scenario": "E il momento del rush.", "quiz": [{"d": "Arrivano 4 comande insieme. Come gestisci?", "o": ["Organizzo per tavolo e tempo, comunico con la brigata", "Inizio con la prima", "Chiedo al responsabile", "Rallento per non sbagliare"], "r": "Organizzo per tavolo e tempo, comunico con la brigata", "fb": "Ottimo! Organizzazione e comunicazione sono la chiave."}]}, "com": {"titolo": "Gestione Comande", "scenario": "Una comanda e illeggibile.", "quiz": [{"d": "Non riesci a leggere la comanda. Cosa fai?", "o": ["Chiamo subito chi l ha scritta per chiarire", "Preparo quello che mi sembra probabile", "Aspetto che vengano", "Butto la comanda"], "r": "Chiamo subito chi l ha scritta per chiarire", "fb": "Corretto! Chiarire subito evita errori."}]}, "ric": {"titolo": "Reclami Cucina", "scenario": "Un piatto torna in cucina freddo.", "quiz": [{"d": "Il piatto e tornato freddo. Cosa fai?", "o": ["Riscaldo e avviso il responsabile", "Lo rimando senza dire niente", "Dico che e colpa del cameriere", "Preparo uno nuovo senza avvisare"], "r": "Riscaldo e avviso il responsabile", "fb": "Bene! Trasparenza e comunicazione sempre."}]}, "mag": {"titolo": "Magazzino", "scenario": "Fai l inventario del magazzino bar.", "quiz": [{"d": "Trovi una bottiglia scaduta. Cosa fai?", "o": ["La separo, la segno e avviso il responsabile", "La butto senza dire niente", "La uso lo stesso", "La nascondo in fondo"], "r": "La separo, la segno e avviso il responsabile", "fb": "Corretto! Prodotti scaduti vanno sempre segnalati."}]}, "prep": {"titolo": "Preparazioni Bar", "scenario": "Prepari il banco bar per il servizio.", "quiz": [{"d": "Come prepari la macchina del caffe?", "o": ["Pulisco il gruppo, faccio un flush e calibro la macinatura", "Accendo e aspetto", "Uso quella del turno precedente", "Chiedo al collega"], "r": "Pulisco il gruppo, faccio un flush e calibro la macinatura", "fb": "Perfetto! La pulizia e fondamentale per la qualita."}]}};
+
+const sqUser=(()=>{try{return JSON.parse(sessionStorage.getItem('sq_user')||'null');}catch(e){return null;}})();
+let userName=sqUser?.nome||'Eroe';
+let userRuolo=sqUser?.ruolo||'Cameriere';
+if(userRuolo==='Sala')userRuolo='Cameriere';
+if(userRuolo==='Cucina')userRuolo='Cuoco';
+let userXP=sqUser?.xp||0;
+let completati=JSON.parse(sessionStorage.getItem('sq_progressi')||'{}');
+
+let sageOpen=false,curNodeId=null,curQuiz=[],curQ=0,curScore=0,sageAnswered=false;
+
+// Sage face animation using warrior idle frames
+let sageFaceFrames=[], sageFaceIdx=0, sageFaceLoaded=false;
+function loadSageFace(){
+  // Load first 8 idle frames for the sage portrait
+  let loaded=0;
+  for(let i=0;i<8;i++){
+    const img=new Image();
+    const num=String(i).padStart(3,'0');
+    img.src='assets/warrior_idle/0_Warrior_Idle_'+num+'.png';
+    img.onload=()=>{sageFaceFrames[i]=img;loaded++;if(loaded===8)sageFaceLoaded=true;};
+    img.onerror=()=>{loaded++;if(loaded===8)sageFaceLoaded=true;};
+  }
+  // Animate sage face
+  setInterval(()=>{
+    if(!sageFaceLoaded||sageFaceFrames.length===0)return;
+    const c=document.getElementById('sage-canvas');
+    if(!c)return;
+    const ctx=c.getContext('2d');
+    ctx.clearRect(0,0,48,48);
+    const fr=sageFaceFrames[sageFaceIdx%sageFaceFrames.length];
+    if(fr) ctx.drawImage(fr,0,0,48,48);
+    sageFaceIdx++;
+  },120);
+}
+loadSageFace();
+
+function updHUD(){
+  document.getElementById('hn').textContent=userName+' · '+userRuolo;
+  document.getElementById('hx').textContent='XP '+userXP;
+  document.getElementById('xf').style.width=Math.min((userXP/500)*100,100)+'%';
+}
+function toast(msg,dur=2800){const el=document.getElementById('toast');el.textContent=msg;el.style.opacity='1';clearTimeout(window._tt);window._tt=setTimeout(()=>el.style.opacity='0',dur);}
+function showBadge(e,t,s){document.getElementById('bi').textContent=e;document.getElementById('bt').textContent=t;document.getElementById('bs').textContent=s;const el=document.getElementById('badge');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2800);}
+function checkBadge(){if(userXP>=100&&!completati['bdg1']){completati['bdg1']=1;setTimeout(()=>showBadge('&#129353;','Badge Bronzo!','Prime sfide superate!'),700);}if(userXP>=250&&!completati['bdg2']){completati['bdg2']=1;setTimeout(()=>showBadge('&#129352;','Badge Argento!','Stai crescendo!'),700);}if(userXP>=500&&!completati['bdg3']){completati['bdg3']=1;setTimeout(()=>showBadge('&#129351;','Badge Oro!','Maestro del dungeon!'),700);}}
+
+function openSage(nodeId){
+  const q=ALL_QUESTS[nodeId];if(!q)return;
+  curNodeId=nodeId;curQuiz=q.quiz;curQ=0;curScore=0;sageAnswered=false;
+  sageOpen=true;
+  document.getElementById('sage-nametag').textContent='Il Saggio — '+q.titolo;
+  document.getElementById('sage-proc').textContent=q.titolo;
+  document.getElementById('sage-sc').textContent=q.scenario||'';
+  showSageQ();
+  document.getElementById('sage-ov').classList.add('show');
+}
+
+function showSageQ(){
+  sageAnswered=false;
+  const q=curQuiz[curQ];
+  document.getElementById('sage-q').textContent=q.d;
+  document.getElementById('sage-prog').textContent='Domanda '+(curQ+1)+' di '+curQuiz.length;
+  const ch=document.getElementById('sage-ch');ch.innerHTML='';
+  q.o.forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='sage-btn';btn.type='button';btn.textContent=opt;
+    btn.onclick=()=>answerSage(opt,q.r,q.fb);
+    ch.appendChild(btn);
+  });
+}
+
+function answerSage(chosen,correct,fb){
+  if(sageAnswered)return;sageAnswered=true;
+  const isOk=chosen.trim()===correct.trim();
+  if(isOk)curScore++;
+  document.querySelectorAll('.sage-btn').forEach(b=>{
+    b.disabled=true;
+    if(b.textContent.trim()===correct.trim())b.style.cssText='background:rgba(46,204,113,.15);border-color:#2ecc71;color:#2ecc71;';
+    else if(b.textContent.trim()===chosen.trim()&&!isOk)b.style.cssText='background:rgba(231,76,60,.12);border-color:#e74c3c;color:#e74c3c;';
+  });
+  const sc=document.getElementById('sage-sc');
+  sc.textContent=(isOk?'✓ Corretto! ':'✗ Sbagliato. ')+fb;
+  sc.style.color=isOk?'#2ecc71':'#e74c3c';
+  setTimeout(()=>{
+    if(curQ<curQuiz.length-1){curQ++;sc.style.color='#8899bb';sc.textContent='';showSageQ();}
+    else{closeSageShowResult();}
+  },1800);
+}
+
+function closeSageShowResult(){
+  document.getElementById('sage-ov').classList.remove('show');
+  sageOpen=false;
+  const total=curQuiz.length,perc=Math.round((curScore/total)*100),xpGain=curScore*15,passed=perc>=60;
+  if(passed){userXP+=xpGain;completati[curNodeId]=true;sessionStorage.setItem('sq_progressi',JSON.stringify(completati));checkBadge();if(sqUser)saveXP();window._psc?.refreshNodes();}
+  updHUD();
+  const icon=perc===100?'&#127942;':perc>=60?'&#11088;':'&#128517;';
+  document.getElementById('res-icon').innerHTML=icon;
+  document.getElementById('res-title').textContent=passed?'Superato!':'Riprova!';
+  document.getElementById('res-xp').textContent=curScore+'/'+total+' corrette'+(passed?' · +'+xpGain+' XP':'');
+  document.getElementById('res-msg').textContent=passed?'Hai risposto al '+perc+'%. Continua l'avventura!':'Ti serve il 60%. Il saggio ti aspetta!';
+  document.getElementById('result').classList.add('show');
+}
+function closeResult(){document.getElementById('result').classList.remove('show');}
+
+async function saveXP(){
+  try{await fetch('https://api.airtable.com/v0/appc3kRop4WSftpC3/Profili_Dipendenti%20-%20Staffquest/'+sqUser.id,{method:'PATCH',headers:{Authorization:'Bearer patkd1CkZnGbrkGhi.7b444f999da251236d952814b8d6a29e507586f9718739e4a7ae18b3947b65d0','Content-Type':'application/json'},body:JSON.stringify({fields:{'XP Totale':userXP,'Ultima Sessione':new Date().toISOString().slice(0,10)}})});}catch(e){console.log('xp:',e);}
+}
+
+class DungeonScene extends Phaser.Scene{
+  constructor(){super('Dungeon');}
+  preload(){
+    // Floor tiles
+    this.load.spritesheet('wf','assets/walls_floor.png',{frameWidth:TW,frameHeight:TW});
+    this.load.spritesheet('fire','assets/fire_animation2.png',{frameWidth:TW,frameHeight:TW});
+    // Warrior walk frames — 30 frames
+    for(let i=0;i<30;i++){
+      const num=String(i).padStart(3,'0');
+      this.load.image('walk_'+i,'assets/warrior_walk/0_Warrior_Walk_'+num+'.png');
+    }
+    // Warrior idle frames — 8 frames
+    for(let i=0;i<8;i++){
+      const num=String(i).padStart(3,'0');
+      this.load.image('idle_'+i,'assets/warrior_idle/0_Warrior_Idle_'+num+'.png');
+    }
+    // Progress bar
+    const W=this.cameras.main.width,H=this.cameras.main.height;
+    const prog=this.add.graphics();
+    const bg=this.add.rectangle(W/2,H/2,W,H,0x07070f);
+    const txt=this.add.text(W/2,H/2-16,'Carico il dungeon...',{fontSize:'9px',color:'#f5c842',fontFamily:'monospace'}).setOrigin(0.5);
+    this.load.on('progress',v=>{prog.clear();prog.fillStyle(0x1a1a2e);prog.fillRect(W/2-80,H/2+8,160,12);prog.fillStyle(0xf5c842);prog.fillRect(W/2-80,H/2+8,160*v,12);});
+    this.load.on('complete',()=>{prog.destroy();bg.destroy();txt.destroy();});
+  }
+
+  create(){
+    window._psc=this;
+    this.jv={x:0,y:0};this.jActive=false;
+    this.wt=0;this.walkFrame=0;this.idleFrame=0;
+    this.ft=0;this.ff=0;this.isMoving=false;
+    this.near=null;this.nodeGfx={};this.torches=[];
+    this.nodes=ALL_MAPS[userRuolo]||ALL_MAPS['Cameriere'];
+    this._buildFloor();
+    this._buildNodes();
+    this._spawnPlayer();
+    this._inputSetup();
+    this._joySetup();
+    this._okSetup();
+    this.cameras.main.startFollow(this.pp,true,0.08,0.08);
+    this.cameras.main.setZoom(SCALE);
+    this.cameras.main.setBounds(0,0,GW*TW,GH*TW);
+    updHUD();
+    setTimeout(()=>toast('Avvicinati alle porte e premi OK per parlare con il saggio!'),1000);
+  }
+
+  _buildFloor(){
+    const FLOOR=[3*13+3,4*13+3,4*13+4,4*13+5,4*13+6,4*13+7];
+    const WALL=[0,1,2,3,13,14,15,7*13,8*13];
+    const rng=(s)=>{let x=s;return()=>{x=(x*1664525+1013904223)&0xffffffff;return Math.abs(x);}};
+    const r=rng(99);
+    for(let row=0;row<GH;row++){
+      for(let col=0;col<GW;col++){
+        const cell=CMAP[row][col];
+        const x=col*TW+TW/2,y=row*TW+TW/2;
+        if(cell===2)this.add.image(x,y,'wf',WALL[r()%WALL.length]).setDepth(0);
+        else this.add.image(x,y,'wf',FLOOR[r()%FLOOR.length]).setDepth(0);
+      }
+    }
+    // Decorative barrels
+    [[2,2],[12,2],[2,21],[12,21]].forEach(([c,rw])=>{
+      const g=this.add.graphics().setDepth(2);
+      const x=c*TW+TW/2,y=rw*TW+TW/2;
+      g.fillStyle(0x6b3311);g.fillRect(x-5,y-8,10,16);
+      g.fillStyle(0xc8921a);g.fillRect(x-5,y-4,10,2);g.fillRect(x-5,y+2,10,2);
+    });
+  }
+
+  _buildNodes(){
+    const W=GW*TW,H=GH*TW;
+    this.nodePixels={};
+    this.nodes.forEach(n=>{this.nodePixels[n.id]={x:W*n.x/100,y:H*n.y/100};});
+    // Corridors
+    const cg=this.add.graphics().setDepth(1);
+    this.nodes.forEach(n=>{
+      const p1=this.nodePixels[n.id];
+      n.conn.forEach(cid=>{
+        const p2=this.nodePixels[cid];if(!p2)return;
+        cg.lineStyle(14,0x1a2a4a,1);cg.lineBetween(p1.x,p1.y,p2.x,p2.y);
+        cg.lineStyle(10,0x808aa3,0.28);cg.lineBetween(p1.x,p1.y,p2.x,p2.y);
+        cg.lineStyle(3,0xc0c8e0,0.1);cg.lineBetween(p1.x,p1.y,p2.x,p2.y);
+        // midpoint dot
+        const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+        cg.fillStyle(0xf5c842,0.2);cg.fillCircle(mx,my,2);
+      });
+    });
+    // Doors
+    this.nodeGfx={};this.doorInteract=[];
+    this.nodes.forEach(n=>{
+      const p=this.nodePixels[n.id];
+      const isDone=completati[n.id]?true:false;
+      const sz=n.sz===2?18:13;
+      const g=this.add.graphics().setDepth(3);
+      this._drawDoor(g,p.x,p.y,sz,isDone);
+      this.nodeGfx[n.id]={g,sz,isDone,x:p.x,y:p.y};
+      // Label
+      this.add.text(p.x,p.y-sz-8,n.label,{fontSize:'5px',color:isDone?'#2ecc71':'#f5c842',fontFamily:'monospace',align:'center',backgroundColor:'rgba(5,13,36,0.88)',padding:{x:3,y:2}}).setOrigin(0.5,1).setDepth(4);
+      // Torch on big doors
+      if(n.sz===2&&!isDone){
+        const t=this.add.image(p.x+sz+5,p.y,'fire',0).setDepth(4).setScale(0.85);
+        this.torches.push(t);
+      }
+      this.doorInteract.push({x:p.x,y:p.y,id:n.id,lbl:n.label.replace(/
+/,' '),sz});
+    });
+  }
+
+  _drawDoor(g,x,y,sz,done){
+    g.clear();
+    const bc=done?0x1a5c30:0x7a3311;
+    const ac=done?0x2ecc71:0xD4A520;
+    // Frame
+    g.fillStyle(0x1a1a2e);g.fillRect(x-sz-3,y-sz*1.4-3,sz*2+6,sz*2.8+6);
+    g.fillStyle(0x2a3a5a);g.fillRect(x-sz-1,y-sz*1.4-1,sz*2+2,sz*2.8+2);
+    // Door
+    g.fillStyle(bc);g.fillRect(x-sz,y-sz*1.4,sz*2,sz*2.8);
+    // Panels
+    g.fillStyle(0,0.2);g.fillRect(x-sz+2,y-sz*1.4+2,sz*2-4,sz*1.3);
+    g.fillStyle(0,0.2);g.fillRect(x-sz+2,y-sz*1.4+sz*1.4+1,sz*2-4,sz*1.2);
+    // Handle
+    g.fillStyle(ac);g.fillCircle(x+sz-4,y,2.5);
+    // Arch
+    g.fillStyle(0x3a4a6a);g.fillRect(x-sz-1,y-sz*1.4-5,sz*2+2,5);
+    // Glow
+    if(!done){g.fillStyle(0xf5c842,0.06);g.fillCircle(x,y,sz*2.2);}
+    // Done indicator
+    if(done){g.fillStyle(0x2ecc71,0.85);g.fillCircle(x,y-sz+4,4);g.fillStyle(0xffffff,0.9);g.fillRect(x-1,y-sz+2,1.5,3.5);g.fillRect(x+0.5,y-sz+4,2.5,-2);}
+  }
+
+  refreshNodes(){
+    this.nodes.forEach(n=>{
+      const info=this.nodeGfx[n.id];
+      if(info&&!info.isDone&&completati[n.id]){info.isDone=true;this._drawDoor(info.g,info.x,info.y,info.sz,true);}
+    });
+  }
+
+  _spawnPlayer(){
+    const first=this.nodePixels[this.nodes[0].id];
+    const sx=first?first.x:GW*TW/2;
+    const sy=first?first.y+TW*3:GH*TW/2;
+    // Use real warrior sprite — scale to fit dungeon
+    // Warrior frames are large PNG, display at small size
+    this.pp=this.physics.add.sprite(sx,sy,'idle_0')
+              .setDisplaySize(18,22)
+              .setCollideWorldBounds(true)
+              .setMaxVelocity(70,70);
+    this.pp.setDepth(10);
+    // Name tag
+    this.ptag=this.add.text(sx,sy,'',{fontSize:'5px',color:'#f5c842',fontFamily:'monospace',backgroundColor:'#00000099',padding:{x:2,y:1}}).setOrigin(0.5,1).setDepth(11);
+    this.ptag.setText(userName);
+  }
+
+  _isWall(c,r){if(r<0||r>=GH||c<0||c>=GW)return true;return CMAP[r][c]===2;}
+
+  _inputSetup(){
+    this.curs=this.input.keyboard.createCursorKeys();
+    this.wk=this.input.keyboard.addKeys({up:'W',dn:'S',lt:'A',rt:'D'});
+    this.spc=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+  }
+
+  _joySetup(){
+    const jw=document.getElementById('joy'),jk=document.getElementById('jk');
+    if(!jw)return;const R=26;
+    const xy=e=>{const t=e.touches?e.touches[0]:e,r=jw.getBoundingClientRect();return{x:t.clientX-r.left-r.width/2,y:t.clientY-r.top-r.height/2};};
+    const start=e=>{e.preventDefault();this.jActive=true;};
+    const move=e=>{if(!this.jActive)return;e.preventDefault();const pt=xy(e),d=Math.sqrt(pt.x*pt.x+pt.y*pt.y),cl=Math.min(d,R),a=Math.atan2(pt.y,pt.x);const cx=Math.cos(a)*cl,cy=Math.sin(a)*cl;jk.style.transform=`translate(calc(-50% + ${cx}px),calc(-50% + ${cy}px))`;this.jv={x:cx/R,y:cy/R};};
+    const end=()=>{this.jActive=false;this.jv={x:0,y:0};jk.style.transform='translate(-50%,-50%)';};
+    jw.addEventListener('touchstart',start,{passive:false});jw.addEventListener('touchmove',move,{passive:false});jw.addEventListener('touchend',end,{passive:false});
+    jw.addEventListener('mousedown',start);window.addEventListener('mousemove',e=>{if(this.jActive)move(e);});window.addEventListener('mouseup',end);
+  }
+
+  _okSetup(){
+    const btn=document.getElementById('bok');if(!btn)return;
+    btn.addEventListener('touchstart',e=>{e.preventDefault();this._interact();},{passive:false});
+    btn.addEventListener('mousedown',()=>this._interact());
+  }
+
+  _interact(){
+    if(sageOpen||!this.near)return;
+    if(completati[this.near.id]){toast('Stanza gia completata!');return;}
+    openSage(this.near.id);
+  }
+
+  update(time,delta){
+    // Torch animation
+    this.ft+=delta;
+    if(this.ft>185){this.ft=0;this.ff=(this.ff+1)%6;this.torches?.forEach(t=>t.setFrame(this.ff));}
+    if(sageOpen){this.pp.setVelocity(0,0);return;}
+
+    const spd=60;let vx=0,vy=0;
+    if(this.curs.left.isDown||this.wk.lt.isDown)vx=-spd;
+    if(this.curs.right.isDown||this.wk.rt.isDown)vx=spd;
+    if(this.curs.up.isDown||this.wk.up.isDown)vy=-spd;
+    if(this.curs.down.isDown||this.wk.dn.isDown)vy=spd;
+    if(this.jActive&&(Math.abs(this.jv.x)>.1||Math.abs(this.jv.y)>.1)){vx=this.jv.x*spd;vy=this.jv.y*spd;}
+
+    // Wall collision
+    const M=4,px=this.pp.x,py=this.pp.y,dt=delta/1000;
+    if(this._isWall(Math.floor((px+vx*dt-M)/TW),Math.floor(py/TW))||this._isWall(Math.floor((px+vx*dt+M)/TW),Math.floor(py/TW)))vx=0;
+    if(this._isWall(Math.floor(px/TW),Math.floor((py+vy*dt-M)/TW))||this._isWall(Math.floor(px/TW),Math.floor((py+vy*dt+M)/TW)))vy=0;
+    this.pp.setVelocity(vx,vy);
+
+    // Animate warrior sprite
+    const moving=vx!==0||vy!==0;
+    this.wt+=delta;
+    if(moving){
+      if(this.wt>80){
+        this.wt=0;
+        this.walkFrame=(this.walkFrame+1)%30;
+        const key='walk_'+this.walkFrame;
+        if(this.textures.exists(key)) this.pp.setTexture(key);
+      }
+      // Flip for left movement
+      this.pp.setFlipX(vx<0);
+    }else{
+      if(this.wt>150){
+        this.wt=0;
+        this.idleFrame=(this.idleFrame+1)%8;
+        const key='idle_'+this.idleFrame;
+        if(this.textures.exists(key)) this.pp.setTexture(key);
+      }
+      this.pp.setFlipX(false);
+    }
+
+    this.ptag.x=this.pp.x;this.ptag.y=this.pp.y-14;
+
+    // Nearest door
+    let near=null,nd=9999;
+    this.doorInteract.forEach(o=>{
+      const d=Phaser.Math.Distance.Between(this.pp.x,this.pp.y,o.x,o.y);
+      if(d<(o.sz*2+10)&&d<nd){near=o;nd=d;}
+    });
+    this.near=near;
+    const ok=document.getElementById('bok'),oh=document.getElementById('oh');
+    if(ok){ok.style.opacity=near?'1':'0.3';if(oh)oh.textContent=near?near.lbl.split(' ')[0]:'esplora';}
+    if(near&&Phaser.Input.Keyboard.JustDown(this.spc))this._interact();
+  }
+}
+
+new Phaser.Game({type:Phaser.AUTO,parent:'ga',backgroundColor:'#07070f',physics:{default:'arcade',arcade:{gravity:{y:0},debug:false}},scene:[DungeonScene],scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH,width:GW*TW,height:GH*TW,parent:'ga'}});
+</script>
+</body>
+</html>
