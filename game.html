@@ -261,7 +261,7 @@ const MAX_XP_BAR = 500;
 
 const STORAGE_KEYS = {
   user: 'sq_user',
-  progress: 'sq_progressi_base_v5'
+  progress: 'sq_progressi_base_v6'
 };
 
 const PATH_MAP = [
@@ -395,7 +395,6 @@ class BaseScene extends Phaser.Scene {
     this.nodes = [];
     this.nodeViews = {};
     this.near = null;
-    this.dpadDir = null;
     this.isMoving = false;
     this.gridC = 4;
     this.gridR = 1;
@@ -403,6 +402,7 @@ class BaseScene extends Phaser.Scene {
     this.walkFrame = 0;
     this.idleFrame = 0;
     this.pathGlowPulse = 0;
+    this.moveRepeatTimer = null;
     this._handlers = [];
   }
 
@@ -459,7 +459,7 @@ class BaseScene extends Phaser.Scene {
 
     updateHUD();
     this.refreshNodes();
-    toast('Usa il D-pad a 4 pulsanti. Movimento a caselle.');
+    toast('Usa il D-pad. Ora il movimento parte subito al tocco.');
   }
 
   tileX(c){ return c * TILE + TILE / 2; }
@@ -661,6 +661,21 @@ class BaseScene extends Phaser.Scene {
     this.enter = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
   }
 
+  startMoveRepeat(dir) {
+    if (state.ui.resultOpen) return;
+    this.tryMove(dir);
+
+    clearInterval(this.moveRepeatTimer);
+    this.moveRepeatTimer = setInterval(() => {
+      this.tryMove(dir);
+    }, 170);
+  }
+
+  stopMoveRepeat() {
+    clearInterval(this.moveRepeatTimer);
+    this.moveRepeatTimer = null;
+  }
+
   setupDpad() {
     const bindDir = (id, dir) => {
       const el = qs(id);
@@ -668,14 +683,14 @@ class BaseScene extends Phaser.Scene {
 
       const activate = (e) => {
         e?.preventDefault?.();
-        if (state.ui.resultOpen) return;
-        this.dpadDir = dir;
         el.classList.add('active');
+        this.startMoveRepeat(dir);
       };
+
       const deactivate = (e) => {
         e?.preventDefault?.();
-        if (this.dpadDir === dir) this.dpadDir = null;
         el.classList.remove('active');
+        this.stopMoveRepeat();
       };
 
       el.addEventListener('touchstart', activate, { passive:false });
@@ -713,6 +728,7 @@ class BaseScene extends Phaser.Scene {
   }
 
   cleanupHandlers() {
+    this.stopMoveRepeat();
     while (this._handlers.length) {
       const fn = this._handlers.pop();
       try { fn(); } catch {}
@@ -748,13 +764,7 @@ class BaseScene extends Phaser.Scene {
 
     this.tweens.timeline({
       tweens: [
-        {
-          targets: this.pp,
-          x: midX,
-          y: midY,
-          duration: 70,
-          ease: 'Linear'
-        },
+        { targets: this.pp, x: midX, y: midY, duration: 70, ease: 'Linear' },
         {
           targets: this.pp,
           x: endX,
@@ -768,45 +778,15 @@ class BaseScene extends Phaser.Scene {
 
     this.tweens.timeline({
       tweens: [
-        {
-          targets: this.shadow,
-          x: midX,
-          y: ((startY + endY) / 2) + 12,
-          scaleX: 0.85,
-          scaleY: 0.85,
-          alpha: 0.20,
-          duration: 70,
-          ease: 'Linear'
-        },
-        {
-          targets: this.shadow,
-          x: endX,
-          y: endY + 12,
-          scaleX: 1,
-          scaleY: 1,
-          alpha: 0.28,
-          duration: 70,
-          ease: 'Linear'
-        }
+        { targets: this.shadow, x: midX, y: ((startY + endY) / 2) + 12, scaleX: 0.85, scaleY: 0.85, alpha: 0.20, duration: 70, ease: 'Linear' },
+        { targets: this.shadow, x: endX, y: endY + 12, scaleX: 1, scaleY: 1, alpha: 0.28, duration: 70, ease: 'Linear' }
       ]
     });
 
     this.tweens.timeline({
       tweens: [
-        {
-          targets: this.ptag,
-          x: midX,
-          y: midY - 26,
-          duration: 70,
-          ease: 'Linear'
-        },
-        {
-          targets: this.ptag,
-          x: endX,
-          y: endY - 26,
-          duration: 70,
-          ease: 'Linear'
-        }
+        { targets: this.ptag, x: midX, y: midY - 26, duration: 70, ease: 'Linear' },
+        { targets: this.ptag, x: endX, y: endY - 26, duration: 70, ease: 'Linear' }
       ]
     });
   }
@@ -881,7 +861,7 @@ class BaseScene extends Phaser.Scene {
     }
   }
 
-  pollInput() {
+  pollKeyboard() {
     if (this.isMoving || state.ui.resultOpen) return;
 
     let dir = null;
@@ -889,7 +869,6 @@ class BaseScene extends Phaser.Scene {
     else if (this.curs.right.isDown || this.wk.rt.isDown) dir = 'right';
     else if (this.curs.up.isDown || this.wk.up.isDown) dir = 'up';
     else if (this.curs.down.isDown || this.wk.dn.isDown) dir = 'down';
-    else if (this.dpadDir) dir = this.dpadDir;
 
     if (dir) this.tryMove(dir);
   }
@@ -898,11 +877,10 @@ class BaseScene extends Phaser.Scene {
     this.pathGlowPulse += delta * 0.01;
     this.redrawPath();
     this.refreshNodes();
-    this.pollInput();
+    this.pollKeyboard();
     this.updatePlayerAnimation(delta);
     this.updateNearNode();
 
-    // sync di sicurezza
     this.shadow.x = this.pp.x;
     this.shadow.y = this.pp.y + 12;
     this.ptag.x = this.pp.x;
